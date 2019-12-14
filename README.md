@@ -3,7 +3,8 @@
 ## Overview
 Apache Kafka is a highly scalable and performant distributed event streaming platform great for storing, reading, and analyzing streaming data. Originally created at LinkedIn, the project was open sourced to the Apache Foundation in 2011. Kafka enables companies looking to move from traditional batch processes over to more real-time streaming use cases.
 
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/architecture1.jpg)
+
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/architecture1.jpg)
 
 The diagram above is a common example of many fast-data (streaming) solutions today. With kafka as a core component of your architecture, multiple raw data sources can pipe data to Kafka, be analyzed in real-time by tools such as Apache Spark, and persisted or consumed by other microservices
 
@@ -68,29 +69,29 @@ Once complete, login to Grafana as `root/secret`
 Soon we will automate the dashboard integration out-of-the-box, but for now follow the steps below to import your Kafka dashboards
 
 From the top left menu, click on "Dashboards" and then "Import" to open the "Import Dashboard" window
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/grafana5.png)
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/grafana5.png)
 
 Paste/import the contents of `dashboards/kafka-dashboard.json` located in the Dashboards directory this repo
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/grafana6.png)
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/grafana6.png)
 
 Select Prometheus in the drop-down as your data-source
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/grafana7.png)
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/grafana7.png)
 
 Now, repeat these steps for importing the Zookeeper dashboard
 
 Once you're done you should be able to see dashboards for both Kafka
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/dashboard1.png)
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/dashboard1.png)
 
 and Zookeeper:
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/dashboard2.png)
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/dashboard2.png)
 
 
 ### Showing the Demo
 By default, this demo will set up up a CronJob which will deploy a job every 2 minutes with a parallelism of 2 and completions of 4. You can visualize the dynamic job creation through the Jobs tab in the Openshift Console as well as through the Strimzi Dashboard we built earlier
 
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/cron1.png)
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/cron1.png)
 
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/cron2.png)
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/cron2.png)
 
 To start a consumer to view incoming `my-topic1` messages
 ```
@@ -134,13 +135,13 @@ SSXVNJHPDQ
 
 ## Bonus:
 Navigate to the Openshift UI and demo through all of the orchestration of pods, jobs, monitoring, resource consumption, etc.
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/openshift1.png)
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/openshift1.png)
 
 If you are using Openshift 4 you can also see additional cluster level metrics for pods, for example our kafka broker `kafka-cluster-0`
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/openshift2.png)
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/openshift2.png)
 
 Navigate back to the Grafana UI to see Kafka/Zookeeper specific metrics collected by Prometheus and how the Jobs that we deployed in our demo can be visualized in real-time
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/openshift3.png)
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/openshift3.png)
 
 
 ### Additional Useful Commands:
