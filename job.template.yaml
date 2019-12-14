@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: <PRODUCERNAME>
+  namespace: <NAMESPACE>
+spec:
+  parallelism: <PARALLELISM>
+  completions: <COMPLETIONS>
+  template:
+    spec:
+      containers:
+      - name: <PRODUCERNAME>
+        image: confluentinc/cp-kafka:5.0.0
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "500Mi"
+            cpu: "250m"
+          limits:
+            memory: "1000Mi"
+            cpu: "500m"
+        command:
+          - sh
+          - -c
+          - "kafka-producer-perf-test --topic <KAFKATOPIC> --num-records 2500000 --record-size <RECORDSIZE> --throughput 10000000 --producer-props acks=1 buffer.memory=67108864 compression.type=lz4 batch.size=20000 linger.ms=100 retries=0 bootstrap.servers=<NODEIP>:<NODEPORTBS>,<NODEIP>:<NODEPORT0>,<NODEIP>:<NODEPORT1>,<NODEIP>:<NODEPORT2>"
+      restartPolicy: Never
+  backoffLimit: 5
