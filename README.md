@@ -1,0 +1,2 @@
+# strimzi-openshift-demo
+ 
