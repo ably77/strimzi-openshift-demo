@@ -41,7 +41,7 @@ It can deploy and manage a Grafana instance on Kubernetes and OpenShift. The fol
 * Install Plugins (panels) defined as dependencies of dashboards
 
 ## Prerequisites:
-- Multi Node Openshift/Kubernetes Cluster (3 workers minimum)
+- Multi Node Openshift/Kubernetes Cluster - (This guide is tested on 4x r5.large workers)
 - Admin Privileges (i.e. cluster-admin RBAC privileges or logged in as system:admin user)
 
 ## Running this Demo
@@ -53,7 +53,7 @@ If you have an Openshift cluster up and are authenticated to the CLI, just run t
 This quick script will:
 - Login to Openshift as an admin
 - Deploy the Strimzi Kafka Operator
-- Deploy an ephemeral kafka cluster with 3 broker nodes and 3 zookeeper nodes
+- Deploy an persistent EBS-backed kafka cluster with 3 broker nodes and 3 zookeeper nodes
 - Setup the kafka brokers connectivity using nodePort services
 - Create three Kafka topics (my-topic1, my-topic2, my-topic3)
 - Deploy Prometheus
@@ -61,7 +61,7 @@ This quick script will:
 - Add the Prometheus Datasource to Grafana
 - Open the Grafana Route
 - Create sample Kafka Producer jobs and cronJobs with correct network routing
-- Deploy sample cronJob1 and cronJob2
+- Deploy sample cronJob1
 
 Once complete, login to Grafana as `root/secret`
 
