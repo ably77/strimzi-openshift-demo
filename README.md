@@ -71,7 +71,13 @@ Soon we will automate the dashboard integration out-of-the-box, but for now foll
 From the top left menu, click on "Dashboards" and then "Import" to open the "Import Dashboard" window
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/grafana5.png)
 
-Paste/import the contents of `dashboards/kafka-dashboard.json` located in the Dashboards directory this repo
+Import Dashboards using Grafana Dashboard ID
+```
+Add the Strimzi Kafka dashboard use ID: 11271
+Add the Kafka Exporter dashboard use ID: 11285
+```
+
+Alternatively you can Paste/import the contents of `dashboards/kafka-dashboard.json` located in the Dashboards directory this repo
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/grafana6.png)
 
 Select Prometheus in the drop-down as your data-source
