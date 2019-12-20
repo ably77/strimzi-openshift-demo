@@ -48,6 +48,9 @@ echo
 echo waiting for kafka deployment to complete
 ./extras/wait-for-condition.sh my-cluster-kafka-2 myproject
 
+### make directory
+mkdir jobs/generated
+
 ### setup kafka jobs with correct NodeIP service addresses
 ./jobs/setup_cron.sh
 ./jobs/setup_jobs.sh
