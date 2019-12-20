@@ -5,7 +5,7 @@ metadata:
 spec:
   kafka:
     version: 2.3.0
-    replicas: 1
+    replicas: 3
     resources:
       requests:
         memory: "1000Mi"
@@ -46,9 +46,9 @@ spec:
       topologyKey: "kubernetes.io/hostname"
     ## for if you set up taints and labels for dedicated nodes see (https://strimzi.io/2018/07/30/running-kafka-on-dedicated-nodes.html)
     #tolerations:
-      #- key: "role"
+      #- key: "dedicated"
         #operator: "Equal"
-        #value: "kafka"
+        #value: "Kafka"
         #effect: "NoSchedule"
     ## for if you set up taints and labels for dedicated nodes, set affinity to label
     #affinity:
@@ -56,10 +56,10 @@ spec:
         #requiredDuringSchedulingIgnoredDuringExecution:
           #nodeSelectorTerms:
           #- matchExpressions:
-            #- key: "node-role.kubernetes.io/kafka"
-              #operator: "In"
+            #- key: dedicated
+              #operator: In
               #values:
-              #- ""
+              #- Kafka
     metrics:
       # Inspired by config from Kafka 2.0.0 example rules:
       # https://github.com/prometheus/jmx_exporter/blob/master/example_configs/kafka-2_0_0.yml
@@ -158,7 +158,7 @@ spec:
         labels:
           quantile: "0.$4"
   zookeeper:
-    replicas: 1
+    replicas: 3
     resources:
       requests:
         memory: "200Mi"

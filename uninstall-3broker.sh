@@ -6,15 +6,8 @@ NAMESPACE=myproject
 oc delete pod kafka-consumer1 -n ${NAMESPACE}
 oc delete pod kafka-consumer2 -n ${NAMESPACE}
 
-# Removing Jobs
-oc delete -f job1.yaml -n ${NAMESPACE}
-oc delete -f job2.yaml -n ${NAMESPACE}
-oc delete -f job3.yaml -n ${NAMESPACE}
-
-# Removing Cron jobs
-oc delete -f cron_job1.yaml -n ${NAMESPACE}
-oc delete -f cron_job2.yaml -n ${NAMESPACE}
-oc delete -f cron_job3.yaml -n ${NAMESPACE}
+# Removing jobs and cronJobs
+oc delete -f jobs/generated/
 
 # Remove Kafka Topics
 oc delete -f strimzi-operator/deploy/crs/my-topic1.yaml -n ${NAMESPACE}
@@ -29,7 +22,8 @@ oc delete -f prometheus/alerting-rules.yaml -n ${NAMESPACE}
 oc delete -f prometheus/prometheus.yaml -n ${NAMESPACE}
 
 # Delete Grafana:
-oc delete -f grafana-operator/deploy/examples/datasources/Prometheus.yaml -n ${NAMESPACE}
+oc delete -f grafana-operator/deploy/examples/datasources/ -n ${NAMESPACE}
+oc delete -f grafana-operator/deploy/examples/dashboards/ -n ${NAMESPACE}
 oc delete -f grafana-operator/deploy/examples/GrafanaWithIngressHost.yaml -n ${NAMESPACE}
 oc delete -f grafana-operator/deploy/operator.yaml -n ${NAMESPACE}
 oc delete -f grafana-operator/deploy/roles -n ${NAMESPACE}
@@ -40,3 +34,7 @@ oc delete -f https://github.com/strimzi/strimzi-kafka-operator/releases/download
 
 # Delete all PVCs
 oc delete pvc --all -n myproject
+
+# Remove jobs and cronJobs from directory
+rm -rf jobs/generated
+mkdir jobs/generated

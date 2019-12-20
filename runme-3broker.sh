@@ -41,12 +41,7 @@ oc create -f grafana-operator/deploy/examples/GrafanaWithIngressHost.yaml -n ${N
 ### deploy dashboard
 ### currently not working due to Issue #75 https://github.com/integr8ly/grafana-operator/issues/75 - must be done manually for now
 
-#oc create -f deploy/examples/dashboards/kafka-dashboard.yaml -n ${NAMESPACE}
-
-### sleep
-#echo sleeping for 20 seconds before checking workload deployment status ...
-#echo
-#sleep 20
+#oc create -f grafana-operator/deploy/examples/dashboards/SimpleDashboard.yaml -n ${NAMESPACE}
 
 ### check kafka deployment status
 echo
@@ -54,12 +49,12 @@ echo waiting for kafka deployment to complete
 ./extras/wait-for-condition.sh my-cluster-kafka-2 myproject
 
 ### setup kafka jobs with correct NodeIP service addresses
-./setup_cron.sh
-./setup_jobs.sh
+./jobs/setup_cron.sh
+./jobs/setup_jobs.sh
 
 ### deploy kafka jobs
-oc create -f cron_job1.yaml
-oc create -f cron_job2.yaml
+oc create -f jobs/generated/cron_job1.yaml
+#oc create -f jobs/generated/cron_job2.yaml
 
 ### check grafana deployment status
 echo
