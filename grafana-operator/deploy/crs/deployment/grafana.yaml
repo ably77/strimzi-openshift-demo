@@ -6,10 +6,10 @@ spec:
   resources:
     requests:
       memory: "250Mi"
-      cpu: "500m"
+      cpu: "100m"
     limits:
       memory: "500Mi"
-      cpu: "1000m"
+      cpu: "500m"
   ingress:
     enabled: True
   config:

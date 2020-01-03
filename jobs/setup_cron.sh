@@ -8,17 +8,17 @@ nodeport1=$(oc get service my-cluster-kafka-1 -n myproject -o=jsonpath='{.spec.p
 nodeport2=$(oc get service my-cluster-kafka-2 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}')
 namespace=myproject
 ## job1 Variables (Optional)
-job1_parallelism=2
+job1_parallelism=1
 job1_completions=4
 job1_topic=my-topic1
 
 ## job2 Variables (Optional)
-job2_parallelism=2
+job2_parallelism=1
 job2_completions=4
 job2_topic=my-topic2
 
 ## job3 Variables (Optional)
-job3_parallelism=2
+job3_parallelism=1
 job3_completions=4
 job3_topic=my-topic1
 
