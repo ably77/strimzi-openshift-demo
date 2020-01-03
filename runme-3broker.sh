@@ -19,6 +19,7 @@ oc create -f prometheus/alerting-rules.yaml -n ${NAMESPACE}
 oc create -f prometheus/prometheus.yaml -n ${NAMESPACE}
 
 ### deploy grafana operator
+echo
 echo now deploying grafana operator
 
 ### deploy crds
@@ -61,4 +62,10 @@ echo checking to see if the grafana deployment is Running before opening route
 ./extras/wait-for-condition.sh grafana-deployment ${NAMESPACE}
 
 ### open grafana route
+echo
+echo opening grafana route
 open https://$(oc get routes -n ${NAMESPACE} | grep grafana-route | awk '{ print $2 }')
+
+### end
+echo
+echo installation complete
