@@ -24,13 +24,13 @@ spec:
               value: "iot-temperature-max"
             - name: CONSUMER_AUTO_OFFSET_RESET
               value: "earliest"
-          resources:
-            requests:
-              memory: "250Mi"
-              cpu: "10m"
-            limits:
-              memory: "350Mi"
-              cpu: "10m"
+          #resources:
+            #requests:
+              #memory: "250Mi"
+              #cpu: "100m"
+            #limits:
+              #memory: "350Mi"
+              #cpu: "250m"
 ---
 apiVersion: v1
 kind: Service

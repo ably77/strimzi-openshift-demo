@@ -5,7 +5,7 @@ metadata:
   labels:
     app: iot-demo
 spec:
-  replicas: 20
+  replicas: 15
   template:
     metadata:
       labels:
@@ -26,10 +26,3 @@ spec:
               value: "15"
             - name: MAX_TEMPERATURE
               value: "25"
-          resources:
-            requests:
-              memory: "20Mi"
-              cpu: "10m"
-            limits:
-              memory: "40Mi"
-              cpu: "10m"
