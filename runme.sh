@@ -45,6 +45,13 @@ echo
 echo waiting for kafka deployment to complete
 ./extras/wait-for-condition.sh my-cluster-kafka-2 myproject
 
+### deploy IoT demo
+oc apply -f iot-demo/stream-app/resources/ -n ${NAMESPACE}
+
+oc apply -f iot-demo/consumer-app/resources/ -n ${NAMESPACE}
+
+oc apply -f iot-demo/device-app/resources/ -n ${NAMESPACE}
+
 ### make directory
 mkdir jobs/generated
 
@@ -54,7 +61,7 @@ mkdir jobs/generated
 
 ### deploy kafka jobs
 oc create -f jobs/generated/cron_job1.yaml
-oc create -f jobs/generated/cron_job2.yaml
+#oc create -f jobs/generated/cron_job2.yaml
 
 ### check grafana deployment status
 echo
@@ -65,6 +72,11 @@ echo checking to see if the grafana deployment is Running before opening route
 echo
 echo opening grafana route
 open https://$(oc get routes -n ${NAMESPACE} | grep grafana-route | awk '{ print $2 }')
+
+### open IoT demo app route
+echo
+echo opening consumer-app route
+open http://$(oc get routes -n ${NAMESPACE} | grep consumer-app | awk '{ print $2 }')
 
 ### end
 echo

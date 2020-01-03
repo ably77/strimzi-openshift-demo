@@ -61,8 +61,10 @@ This quick script will:
 - Add the Prometheus Datasource to Grafana
 - Add Strimzi Kafka, Kafka Exporter, and Zookeeper Dashboards
 - Open the Grafana Route
-- Create sample Kafka Producer jobs and cronJobs with correct network routing
-- Deploy sample cronJob1 and cronJob2
+- Deploy the IoT Temperature Sensors Demo
+- Open route to IoT Sensors Demo App
+- Generate sample Kafka Producer jobs and cronJobs with correct network routing (/jobs/generated/)
+- Deploy sample cronJob1
 
 
 ### Showing the Demo

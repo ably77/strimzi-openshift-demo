@@ -9,8 +9,11 @@ oc delete pod kafka-consumer2 -n ${NAMESPACE}
 # Removing jobs and cronJobs
 oc delete -f jobs/generated/
 
+# Removing IoT demo
+oc delete all -l app=iot-demo
+
 # Remove Kafka Topics
-oc delete -f strimzi-operator/deploy/crs/topics/ -n ${NAMESPACE}
+oc delete kafkatopics --all
 
 # Delete Kafka Cluster
 oc delete -f strimzi-operator/deploy/crs/deployments/kafka-cluster-3broker-pv.yaml -n ${NAMESPACE}
