@@ -13,7 +13,7 @@ An Operator is a method of packaging, deploying and managing a Kubernetes applic
 
 The full list of Operators can be found on [operatorhub.io](https://operatorhub.io/), the home for the Kubernetes community to share Operators.
 
-### Strimzi Kafka Operator
+#### Strimzi Kafka Operator
 Today we will be using the [strimzi.io](https://operatorhub.io/operator/strimzi-kafka-operator) Kafka Operator. Strimzi makes it easy to run Apache Kafka on OpenShift or Kubernetes.
 
 Strimzi provides three operators:
@@ -27,8 +27,7 @@ Responsible for managing Kafka topics within a Kafka cluster running within an O
 User Operator
 Responsible for managing Kafka users within a Kafka cluster running within an OpenShift or Kubernetes cluster.
 
-### Integreatly Grafana Operator
-
+#### Integr8ly Grafana Operator
 A Kubernetes Operator based on the Operator SDK for creating and managing Grafana instances.
 
 The Operator is available on [Operator Hub](https://operatorhub.io/operator/grafana-operator).
@@ -40,18 +39,17 @@ It can deploy and manage a Grafana instance on Kubernetes and OpenShift. The fol
 * Import Grafana datasources from the same namespace
 * Install Plugins (panels) defined as dependencies of dashboards
 
-## Prerequisites:
+## Prerequisites for Lab:
 - Multi Node Openshift/Kubernetes Cluster - (This guide is tested on 4x r5.large workers)
 - Admin Privileges (i.e. cluster-admin RBAC privileges or logged in as system:admin user)
 
 ## Running this Demo
-If you have an Openshift cluster up and are authenticated to the CLI, just run the command below. If you prefer to run through the commands manually, the instructions are in the section below.
+If you have an Openshift cluster up and are authenticated to the CLI, just run the installation script below. The script itself has more detailed information on the steps and commands if you prefer to run through this demo manually.
 ```
 ./runme.sh
 ```
 
 This quick script will:
-- Login to Openshift as an admin
 - Deploy the Strimzi Kafka Operator
 - Deploy an persistent EBS-backed kafka cluster with 3 broker nodes and 3 zookeeper nodes
 - Setup the kafka brokers connectivity using nodePort services
@@ -60,15 +58,48 @@ This quick script will:
 - Deploy the Integr8ly Grafana Operator
 - Add the Prometheus Datasource to Grafana
 - Add Strimzi Kafka, Kafka Exporter, and Zookeeper Dashboards
-- Open the Grafana Route
 - Deploy the IoT Temperature Sensors Demo
+- Open the Grafana Route
 - Open route to IoT Sensors Demo App
 - Generate sample Kafka Producer jobs and cronJobs with correct network routing (/jobs/generated/)
 - Deploy sample cronJob1
 
 
-### Showing the Demo
-By default, this demo will set up up a CronJob which will deploy a job every 2 minutes with a parallelism of 2 and completions of 4. You can visualize the dynamic job creation through the Jobs tab in the Openshift Console as well as through the Strimzi Dashboard we built earlier
+### Demonstrating the IoT Demo
+By default, the demo will deploy an example IoT Temperature Sensors Demo. This demo will deploy a consumer facing portal that collects temperature data from simulated IoT devices and processes them.
+
+This demo creates a couple of topics. The first one named `iot-temperature` is used by the device simulator for sending temperature values and by the stream application for getting such values and processing them. The second one is the `iot-temperature-max` topic where the stream application puts the max temperature value processed in the specified time window that is then displayed in real-time on the consumer facing dashboard in the gauges charts as well as the log of incoming messages.
+
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/iot1.png)
+
+As a part of this demo, it is possible to scale up the number of pods in the deployment in order to simulate more devices sending temperature values, each one with a different and randomly generated id. By default this is set at 15 devices.
+```
+oc scale deployment device-app --replicas=20
+```
+
+Check out the ![Official Github](https://github.com/strimzi/strimzi-lab/tree/master/iot-demo) for this IoT demo for further detail
+
+#### Demonstrating IoT Demo in Grafana
+As part of the provided Grafana dashboards, you can also view more kafka-specific metrics for the IoT demo by filtering by the `iot-temperature` or `iot-temperature-max` topics
+
+Here you can see metrics such as:
+- Kafka broker CPU/MEM usage
+- JVM statistics
+- Incoming/Outgoing byte and message rates
+- Log Size
+
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/iot2.png)
+
+## Bonus
+
+By default, this demo will generate a few Jobs and CronJobs in the `jobs/generated` directory and will deploy `cron_job1.yaml`. These jobs leverage the client tools built into kafka itself in order to demonstrate producing test messages as well as consuming them.
+
+By default the cronJobs will have the following characteristics:
+- Parallelism: 1
+- Completions: 4
+- Schedule: every 2 minutes
+
+You can visualize the dynamic job creation through the Pods/Jobs tab in the Openshift Console as well as through the Grafana Dashboards provided.
 
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/cron1.png)
 
@@ -92,7 +123,7 @@ oc logs -n myproject kafka-consumer2
 
 A single kafka topic can also handle many Producers sending many different messages to it, to demonstrate this you can run `job3.yaml`
 ```
-oc create -n myproject -f job3.yaml
+oc create -n myproject -f jobs/generated/job3.yaml
 ```
 
 Taking a look at the `job3.yaml` compared to `job1.yaml` you can see that the only difference is in record-size
@@ -114,7 +145,6 @@ SSXVNJHPDQ
 SSXVNJHPDQ
 ```
 
-## Bonus:
 Navigate to the Openshift UI and demo through all of the orchestration of pods, jobs, monitoring, resource consumption, etc.
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/openshift1.png)
 
