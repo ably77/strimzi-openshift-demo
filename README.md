@@ -57,39 +57,12 @@ This quick script will:
 - Setup the kafka brokers connectivity using nodePort services
 - Create three Kafka topics (my-topic1, my-topic2, my-topic3)
 - Deploy Prometheus
-- Deploy the Integrately Grafana Operator
+- Deploy the Integr8ly Grafana Operator
 - Add the Prometheus Datasource to Grafana
+- Add Strimzi Kafka, Kafka Exporter, and Zookeeper Dashboards
 - Open the Grafana Route
 - Create sample Kafka Producer jobs and cronJobs with correct network routing
-- Deploy sample cronJob1
-
-Once complete, login to Grafana as `root/secret`
-
-## Adding Dashboards
-Soon we will automate the dashboard integration out-of-the-box, but for now follow the steps below to import your Kafka dashboards
-
-From the top left menu, click on "Dashboards" and then "Import" to open the "Import Dashboard" window
-![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/grafana5.png)
-
-Import Dashboards using Grafana Dashboard ID
-```
-Add the Strimzi Kafka dashboard use ID: 11271
-Add the Kafka Exporter dashboard use ID: 11285
-```
-
-Alternatively you can Paste/import the contents of `dashboards/kafka-dashboard.json` located in the Dashboards directory this repo
-![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/grafana6.png)
-
-Select Prometheus in the drop-down as your data-source
-![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/grafana7.png)
-
-Now, repeat these steps for importing the Zookeeper dashboard
-
-Once you're done you should be able to see dashboards for both Kafka
-![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/dashboard1.png)
-
-and Zookeeper:
-![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/dashboard2.png)
+- Deploy sample cronJob1 and cronJob2
 
 
 ### Showing the Demo
@@ -152,12 +125,14 @@ Navigate back to the Grafana UI to see Kafka/Zookeeper specific metrics collecte
 
 ### Additional Useful Commands:
 
+#### Strimzi
+
 List all kafka topics
 ```
 oc get kafkatopic
 ```
 
-To scale your Kafka cluster up, add a broker using the commmand below and modify the `replicas:1 --> 2` for kafka brokers
+To scale your Kafka cluster up, add a broker using the commmand below and modify the `replicas:3 --> 4` for kafka brokers
 ```
 oc edit -f strimzi-operator/deploy/crs/kafka-cluster-3broker.yaml -n myproject
 ```
@@ -166,6 +141,24 @@ To edit your topic (i.e. adding topic parameters or scaling up partitions)
 ```
 oc edit -f strimzi-operator/deploy/crs/my-topic1.yaml
 ```
+
+Check out the ![Official Documentation](https://strimzi.io/documentation/) for strimzi for additional documentation
+
+#### Grafana
+
+Should you need to login to Grafana, use the credentials `root/secret`
+
+List Grafana dashboards
+```
+oc get grafanadashboards
+```
+
+List Grafana datasources
+```
+oc get grafanadatasources
+```
+
+Check out the ![Official Github](https://github.com/integr8ly/grafana-operator/tree/master/documentation) for integr8ly for additional documentation
 
 ## Uninstall
 
