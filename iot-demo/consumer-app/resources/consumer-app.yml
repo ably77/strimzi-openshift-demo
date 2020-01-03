@@ -26,11 +26,11 @@ spec:
               value: "earliest"
           resources:
             requests:
-              memory: "1000Mi"
-              cpu: "200m"
+              memory: "250Mi"
+              cpu: "10m"
             limits:
-              memory: "1500Mi"
-              cpu: "300m"
+              memory: "350Mi"
+              cpu: "10m"
 ---
 apiVersion: v1
 kind: Service
