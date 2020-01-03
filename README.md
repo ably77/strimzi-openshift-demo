@@ -1,4 +1,8 @@
 # Openshift Strimzi Kafka Operator Demo - Multi-node Deployment (AWS)
+- Real-time Streaming Application with Console
+- ArgoCD driven Continuous Delivery
+- Prometheus metrics
+- Grafana Dashboards
 
 ## Overview
 Apache Kafka is a highly scalable and performant distributed event streaming platform great for storing, reading, and analyzing streaming data. Originally created at LinkedIn, the project was open sourced to the Apache Foundation in 2011. Kafka enables companies looking to move from traditional batch processes over to more real-time streaming use cases.
@@ -39,6 +43,13 @@ It can deploy and manage a Grafana instance on Kubernetes and OpenShift. The fol
 * Import Grafana datasources from the same namespace
 * Install Plugins (panels) defined as dependencies of dashboards
 
+#### ArgoCD Operator
+Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes.
+
+Why Argo CD?
+- Application definitions, configurations, and environments should be declarative and version controlled.
+- Application deployment and lifecycle management should be automated, auditable, and easy to understand.
+
 ## Prerequisites for Lab:
 - Multi Node Openshift/Kubernetes Cluster - (This guide is tested on 3x r5.xlarge workers)
 - Admin Privileges (i.e. cluster-admin RBAC privileges or logged in as system:admin user)
@@ -58,26 +69,27 @@ This quick script will:
 - Deploy the Integr8ly Grafana Operator
 - Add the Prometheus Datasource to Grafana
 - Add Strimzi Kafka, Kafka Exporter, and Zookeeper Dashboards
-- Deploy the IoT Temperature Sensors Demo
-- Open the Grafana Route
-- Open route to IoT Sensors Demo App
+- Deploy and configure ArgoCD
+- Connect ArgoCD to IoT Github Repo (customizable)
+- Deploy the IoT Temperature Sensors Demo using ArgoCD
+- Open ArgoCD Route
+- Open Grafana Route
+- Open IoT Sensors Demo App Route
 - Generate sample Kafka Producer jobs and cronJobs with correct network routing (/jobs/generated/)
 - Deploy sample cronJob1 and cronJob2
 
 
 ### Demonstrating the IoT Demo
-By default, the demo will deploy an example IoT Temperature Sensors Demo. This demo will deploy a consumer facing portal that collects temperature data from simulated IoT devices and processes them.
+By default, the demo will deploy an example IoT Temperature Sensors Demo using ArgoCD based on ![this repo](https://github.com/ably77/iot-argocd).  
 
+** Note:** If you plan to demonstrate the Continuous Delivery features, fork this repo and redirect the URL in the `runme.sh` script
+
+This demo will deploy a consumer facing portal that collects temperature data from simulated IoT devices and processes them.
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/iot1.png)
 
 This demo creates a couple of topics. The first one named `iot-temperature` is used by the device simulator for sending temperature values and by the stream application for getting such values and processing them. The second one is the `iot-temperature-max` topic where the stream application puts the max temperature value processed in the specified time window that is then displayed in real-time on the consumer facing dashboard in the gauges charts as well as the log of incoming messages.
 
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/iot2.png)
-
-As a part of this demo, it is possible to scale up the number of pods in the deployment in order to simulate more devices sending temperature values, each one with a different and randomly generated id. By default this is set at 30 devices.
-```
-oc scale deployment device-app --replicas=50
-```
 
 Check out the ![Official Github](https://github.com/strimzi/strimzi-lab/tree/master/iot-demo) for this IoT demo for further detail
 
@@ -90,6 +102,50 @@ Here you can see metrics such as:
 - Incoming/Outgoing byte and message rates
 - Log Size
 
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/grafana1.png)
+
+#### Demonstrating Continuous Delivery with ArgoCD
+Login to the ArgoCD console and navigate to the iot-demo application
+```
+username: admin
+password: secret
+```
+
+Here you should see the topology of the IoT demo application
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/argo1.png)
+
+By default, the repo is set up to deploy the IoT demo app based off of my personal repo (https://github.com/ably77/iot-argocd). If you want to demonstrate and control git push to drive continuous delivery, fork this repository and re-direct to your own personal github. You can set the `IOT_GITHUB_URL` variable at the top of the `runme.sh` script before deploying this demo
+```
+$ cat runme.sh
+#!/bin/bash
+
+NAMESPACE="myproject"
+# Clone this repo and replace below if you want to demonstrate git push --> CD on your own github clone
+IOT_GITHUB_URL="https://github.com/ably77/iot-argocd"
+<...>
+```
+
+Make corresponding changes to the IoT github repo, such as increasing replicas of the `device-app.yml` from 30 to 50
+```
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: device-app
+  labels:
+    app: iot-demo
+spec:
+  replicas: 30
+<...>
+```
+
+Push your changes to Github and within minutes you should automatically see the desired changes reflected in your deployments
+```
+$ oc get deployments
+NAME                         READY   UP-TO-DATE   AVAILABLE   AGE
+device-app                   50/50   50           50          12m
+```
+
+You will also see the number of devices reflected in the IoT consumer app dashboard
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/iot3.png)
 
 ## Bonus
@@ -195,8 +251,8 @@ oc get grafanadatasources
 Check out the ![Official Github](https://github.com/integr8ly/grafana-operator/tree/master/documentation) for integr8ly for additional documentation
 
 ## Uninstall
-
-Run
 ```
 ./uninstall.sh
 ```
+
+Note: If the uninstall hangs, just re-run the script
