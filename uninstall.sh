@@ -13,7 +13,7 @@ oc delete -f jobs/generated/
 oc delete -f strimzi-operator/deploy/crs/topics/ -n ${NAMESPACE}
 
 # Delete Kafka Cluster
-oc delete -f strimzi-operator/deploy/crs/deployments/kafka-cluster-3broker.yaml -n ${NAMESPACE}
+oc delete -f strimzi-operator/deploy/crs/deployments/kafka-cluster-3broker-pv.yaml -n ${NAMESPACE}
 
 # Delete Prometheus:
 oc delete -f prometheus/alerting-rules.yaml -n ${NAMESPACE}

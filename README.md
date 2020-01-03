@@ -47,7 +47,7 @@ It can deploy and manage a Grafana instance on Kubernetes and OpenShift. The fol
 ## Running this Demo
 If you have an Openshift cluster up and are authenticated to the CLI, just run the command below. If you prefer to run through the commands manually, the instructions are in the section below.
 ```
-./runme-3broker.sh
+./runme.sh
 ```
 
 This quick script will:
@@ -164,5 +164,5 @@ Check out the ![Official Github](https://github.com/integr8ly/grafana-operator/t
 
 Run
 ```
-./uninstall-3broker.sh
+./uninstall.sh
 ```

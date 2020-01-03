@@ -9,7 +9,7 @@ oc new-project ${NAMESPACE}
 oc apply -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.15.0/strimzi-cluster-operator-0.15.0.yaml -n ${NAMESPACE}
 
 ### Provision the Apache Kafka Cluster
-oc create -f strimzi-operator/deploy/crs/deployments/kafka-cluster-3broker.yaml -n ${NAMESPACE}
+oc create -f strimzi-operator/deploy/crs/deployments/kafka-cluster-3broker-pv.yaml -n ${NAMESPACE}
 
 ### Create Kafka Topics
 oc create -f strimzi-operator/deploy/crs/topics/ -n ${NAMESPACE}
