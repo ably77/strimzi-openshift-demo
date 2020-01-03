@@ -12,7 +12,6 @@ spec:
       cpu: "1000m"
   ingress:
     enabled: True
-    hostname: "grafana.apps.127.0.0.1.nip.io"
   config:
     log:
       mode: "console"
@@ -23,10 +22,8 @@ spec:
     auth:
       disable_login_form: False
       disable_signout_menu: True
-    auth.basic:
-      enabled: False
     auth.anonymous:
-      enabled: False
+      enabled: True
   dashboardLabelSelector:
     - matchExpressions:
         - {key: app, operator: In, values: [grafana]}
