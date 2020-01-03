@@ -6,8 +6,8 @@ metadata:
     app: iot-demo
     strimzi.io/cluster: my-cluster
 spec:
-  partitions: 1
-  replicas: 1
+  partitions: 10
+  replicas: 3
 ---
 apiVersion: kafka.strimzi.io/v1alpha1
 kind: KafkaTopic
@@ -17,5 +17,5 @@ metadata:
     app: iot-demo
     strimzi.io/cluster: my-cluster
 spec:
-  partitions: 1
-  replicas: 1
+  partitions: 10
+  replicas: 3
