@@ -60,8 +60,8 @@ mkdir jobs/generated
 ./jobs/setup_jobs.sh
 
 ### deploy kafka jobs
-oc create -f jobs/generated/cron_job1.yaml
-#oc create -f jobs/generated/cron_job2.yaml
+oc create -f jobs/generated/cron_job1.yaml -n ${NAMESPACE}
+oc create -f jobs/generated/cron_job2.yaml -n ${NAMESPACE}
 
 ### check grafana deployment status
 echo

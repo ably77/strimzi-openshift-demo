@@ -40,7 +40,7 @@ It can deploy and manage a Grafana instance on Kubernetes and OpenShift. The fol
 * Install Plugins (panels) defined as dependencies of dashboards
 
 ## Prerequisites for Lab:
-- Multi Node Openshift/Kubernetes Cluster - (This guide is tested on 4x r5.large workers)
+- Multi Node Openshift/Kubernetes Cluster - (This guide is tested on 3x r5.xlarge workers)
 - Admin Privileges (i.e. cluster-admin RBAC privileges or logged in as system:admin user)
 
 ## Running this Demo
@@ -62,7 +62,7 @@ This quick script will:
 - Open the Grafana Route
 - Open route to IoT Sensors Demo App
 - Generate sample Kafka Producer jobs and cronJobs with correct network routing (/jobs/generated/)
-- Deploy sample cronJob1
+- Deploy sample cronJob1 and cronJob2
 
 
 ### Demonstrating the IoT Demo
@@ -74,9 +74,9 @@ This demo creates a couple of topics. The first one named `iot-temperature` is u
 
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/iot2.png)
 
-As a part of this demo, it is possible to scale up the number of pods in the deployment in order to simulate more devices sending temperature values, each one with a different and randomly generated id. By default this is set at 15 devices.
+As a part of this demo, it is possible to scale up the number of pods in the deployment in order to simulate more devices sending temperature values, each one with a different and randomly generated id. By default this is set at 30 devices.
 ```
-oc scale deployment device-app --replicas=20
+oc scale deployment device-app --replicas=50
 ```
 
 Check out the ![Official Github](https://github.com/strimzi/strimzi-lab/tree/master/iot-demo) for this IoT demo for further detail
