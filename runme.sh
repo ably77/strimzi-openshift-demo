@@ -50,12 +50,6 @@ echo waiting for kafka deployment to complete
 ### deploy ArgoCD/IoT demo
 ./argocd/runme.sh ${IOT_GITHUB_URL}
 
-### switch back to main project
-oc project ${NAMESPACE}
-
-### make directory
-mkdir jobs/generated
-
 ### setup kafka jobs with correct NodeIP service addresses
 ./jobs/setup_cron.sh
 ./jobs/setup_jobs.sh

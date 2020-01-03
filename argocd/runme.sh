@@ -34,9 +34,8 @@ oc -n ${argo_namespace} create route edge argocd-server --service=argocd-server 
 # Get ArgoCD Server Route Hostname
 argocd_route=$(oc -n ${argo_namespace} get route argocd-server -o jsonpath='{.spec.host}')
 
-# sleep - automate this
-echo sleeping 75 seconds to wait for route creation to complete
-sleep 75
+# wait for patch re-deployment
+./extras/wait-for-condition.sh argocd-server ${argo_namespace}
 
 # Login with the current admin password
 argocd --insecure --grpc-web login ${argocd_route}:443 --username admin --password ${argocd_server_password}
