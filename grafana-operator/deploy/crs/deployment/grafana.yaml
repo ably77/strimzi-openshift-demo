@@ -3,13 +3,13 @@ kind: Grafana
 metadata:
   name: example-grafana
 spec:
-  #resources:
-    #requests:
-      #memory: "250Mi"
-      #cpu: "1000m"
-    #limits:
-      #memory: "750Mi"
-      #cpu: "1250m"
+  resources:
+    requests:
+      memory: "250Mi"
+      cpu: "100m"
+    limits:
+      memory: "500Mi"
+      cpu: "500m"
   ingress:
     enabled: True
   config:
