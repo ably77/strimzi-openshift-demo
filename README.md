@@ -123,7 +123,7 @@ You can add your repo using the argoCD CLI
 argocd repo add <GITHUB_REPO_URL_HERE>
 ```
 
-You can set the `repoURL` variable at the top of the `argocd/iot-demo.yaml` script before deploying this demo
+You can set the `repoURL` variable in the the `argocd/iot-demo.yaml` manifest before deploying this demo
 ```
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -136,7 +136,7 @@ spec:
     repoURL: <GITHUB_REPO_URL_HERE>
 ```
 
-Redeploy using your github repo as a source
+Redeploy the application
 ```
 oc create -f argocd/iot-demo.yaml -n myproject
 ```
