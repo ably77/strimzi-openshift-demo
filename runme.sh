@@ -55,6 +55,9 @@ echo waiting for kafka deployment to complete
 ### deploy IoT demo application
 oc create -f argocd/iot-demo.yaml
 
+### make jobs/generated if it doesnt exist
+mkdir jobs/generated
+
 ### setup kafka jobs with correct NodeIP service addresses
 ./jobs/setup_cron.sh
 ./jobs/setup_jobs.sh
@@ -76,6 +79,9 @@ open http://${argocd_route}
 echo
 echo opening grafana route
 open https://$(oc get routes -n ${NAMESPACE} | grep grafana-route | awk '{ print $2 }')
+
+### Wait for IoT Demo
+./extras/wait-for-condition.sh consumer-app myproject
 
 ### open IoT demo app route
 echo
