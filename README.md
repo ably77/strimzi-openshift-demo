@@ -85,6 +85,7 @@ By default, the demo will deploy an example IoT Temperature Sensors Demo using A
 ** Note:** If you plan to demonstrate the Continuous Delivery features, fork this repo and redirect the URL in the `runme.sh` script
 
 This demo will deploy a consumer facing portal that collects temperature data from simulated IoT devices and processes them.
+
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/iot1.png)
 
 This demo creates a couple of topics. The first one named `iot-temperature` is used by the device simulator for sending temperature values and by the stream application for getting such values and processing them. The second one is the `iot-temperature-max` topic where the stream application puts the max temperature value processed in the specified time window that is then displayed in real-time on the consumer facing dashboard in the gauges charts as well as the log of incoming messages.
