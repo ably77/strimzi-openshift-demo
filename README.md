@@ -250,6 +250,29 @@ oc get grafanadatasources
 
 Check out the ![Official Github](https://github.com/integr8ly/grafana-operator/tree/master/documentation) for integr8ly for additional documentation
 
+## Troubleshooting
+
+#### ArgoCD Bug
+If you see the error
+```
+FATA[0000] rpc error: code = NotFound desc = the server could not find the requested resource (get applications.argoproj.io)
+```
+
+Uninstall the ArgoCD portion of this demo and re-run the whole script
+```
+./argocd/uninstall.sh
+
+./runme.sh
+```
+
+Alternatively, you can just run the iot-demo app without ArgoCD
+```
+oc create -f extras/archive/iot-demo/consumer-app/resources/consumer-app.yml -n myproject
+oc create -f extras/archive/iot-demo/device-app/resources/device-app.yml -n myproject
+oc create -f extras/archive/iot-demo/stream-app/resources/stream-app.yml -n myproject
+oc create -f extras/archive/iot-demo/stream-app/resources/topics.yml -n myproject
+```
+
 ## Uninstall
 ```
 ./uninstall.sh
