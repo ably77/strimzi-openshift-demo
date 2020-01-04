@@ -48,6 +48,8 @@ open http://${argocd_route}
 
 # Add repo to be managed to argo repositories
 argocd repo add ${repo_url}
+echo sleeping for 5 seconds
+sleep 5
 
 # Create argo app
 ./argocd/create-app.sh ${argo_project} ${app_name} ${repo_url} ${app_namespace} ${sync_policy}
