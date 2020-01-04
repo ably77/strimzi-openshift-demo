@@ -38,7 +38,7 @@ argocd --insecure --grpc-web login ${argocd_route}:443 --username admin --passwo
 argocd --insecure --grpc-web --server ${argocd_route}:443 account update-password --current-password ${argocd_server_password} --new-password ${new_password}
 
 # Open route
-open http://${argocd_route}
+#open http://${argocd_route}
 
 # Add repo to be managed to argo repositories
 argocd repo add ${repo_url}

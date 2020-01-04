@@ -2,9 +2,6 @@
 
 NAMESPACE="myproject"
 
-### deploy ArgoCD
-./argocd/runme.sh
-
 ### Create the project namespace
 oc new-project ${NAMESPACE}
 
@@ -48,6 +45,13 @@ echo
 echo waiting for kafka deployment to complete
 ./extras/wait-for-condition.sh my-cluster-kafka-2 myproject
 
+### deploy ArgoCD
+./argocd/runme.sh
+
+### SUPER HACKY BUG FIX - uninstall and reinstall
+./argocd/uninstall.sh
+./argocd/runme.sh
+
 ### deploy IoT demo application
 oc create -f argocd/iot-demo.yaml
 
@@ -63,6 +67,10 @@ oc create -f jobs/generated/cron_job2.yaml -n ${NAMESPACE}
 echo
 echo checking to see if the grafana deployment is Running before opening route
 ./extras/wait-for-condition.sh grafana-deployment ${NAMESPACE}
+
+### Open argocd route
+argocd_route=$(oc -n argocd get route argocd-server -o jsonpath='{.spec.host}')
+open http://${argocd_route}
 
 ### open grafana route
 echo
