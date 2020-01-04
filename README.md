@@ -80,11 +80,7 @@ This quick script will:
 
 
 ### Demonstrating the IoT Demo
-By default, the demo will deploy an example IoT Temperature Sensors Demo using ArgoCD based on ![this repo](https://github.com/ably77/iot-argocd).  
-
-** Note:** If you plan to demonstrate the Continuous Delivery features, fork this repo and redirect the URL in the `runme.sh` script
-
-This demo will deploy a consumer facing portal that collects temperature data from simulated IoT devices and processes them.
+By default, the demo will deploy an example IoT Temperature Sensors Demo using ArgoCD based on ![this repo](https://github.com/ably77/iot-argocd). This demo will deploy a consumer facing portal that collects temperature data from simulated IoT devices and processes them.
 
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/iot1.png)
 
@@ -115,18 +111,37 @@ password: secret
 Here you should see the topology of the IoT demo application
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/argo1.png)
 
-By default, the repo is set up to deploy the IoT demo app based off of my personal repo (https://github.com/ably77/iot-argocd). If you want to demonstrate and control git push to drive continuous delivery, fork this repository and re-direct to your own personal github. You can set the `IOT_GITHUB_URL` variable at the top of the `runme.sh` script before deploying this demo
-```
-$ cat runme.sh
-#!/bin/bash
+By default, the repo is set up to deploy the IoT demo app based off of my personal repo (https://github.com/ably77/iot-argocd). If you want to demonstrate and control git push to drive continuous delivery, fork this repository and re-direct to your own personal github.
 
-NAMESPACE="myproject"
-# Clone this repo and replace below if you want to demonstrate git push --> CD on your own github clone
-IOT_GITHUB_URL="https://github.com/ably77/iot-argocd"
-<...>
+First uninstall the existing iot-demo app:
+```
+oc delete -f argocd/iot-demo.yaml -n myproject
 ```
 
-Make corresponding changes to the IoT github repo, such as increasing replicas of the `device-app.yml` from 30 to 50
+You can add your repo using the argoCD CLI
+```
+argocd repo add <GITHUB_REPO_URL_HERE>
+```
+
+You can set the `repoURL` variable at the top of the `argocd/iot-demo.yaml` script before deploying this demo
+```
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: iot-demo
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: <GITHUB_REPO_URL_HERE>
+```
+
+Redeploy using your github repo as a source
+```
+oc create -f argocd/iot-demo.yaml -n myproject
+```
+
+Now you can make corresponding changes to the IoT github repo, such as increasing replicas of the `device-app.yml` from 30 to 50
 ```
 apiVersion: extensions/v1beta1
 kind: Deployment
