@@ -1,8 +1,6 @@
 #!/bin/bash
 
 NAMESPACE="myproject"
-# Clone this repo and replace below if you want to demonstrate git push --> CD on your own github clone
-IOT_GITHUB_URL="https://github.com/ably77/iot-argocd"
 
 ### Create the project namespace
 oc new-project ${NAMESPACE}
@@ -47,8 +45,11 @@ echo
 echo waiting for kafka deployment to complete
 ./extras/wait-for-condition.sh my-cluster-kafka-2 myproject
 
-### deploy ArgoCD/IoT demo
-./argocd/runme.sh ${IOT_GITHUB_URL}
+### deploy ArgoCD
+./argocd/runme.sh
+
+### deploy IoT demo application
+oc create -f argocd/iot-demo.yaml
 
 ### setup kafka jobs with correct NodeIP service addresses
 ./jobs/setup_cron.sh

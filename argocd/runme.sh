@@ -4,13 +4,7 @@
 argo_namespace="argocd"
 new_password="secret"
 argo_version="1.3.6"
-
-# demo app deployment variables
-argo_project="default"
-app_name="iot-demo"
-app_namespace="myproject"
-repo_url="$1"
-sync_policy="none"
+repo_url="https://github.com/ably77/iot-argocd"
 
 # Create a new namespace for ArgoCD components
 oc new-project ${argo_namespace}
@@ -48,17 +42,3 @@ open http://${argocd_route}
 
 # Add repo to be managed to argo repositories
 argocd repo add ${repo_url}
-echo sleeping for 5 seconds
-sleep 5
-
-# Create argo app
-./argocd/create-app.sh ${argo_project} ${app_name} ${repo_url} ${app_namespace} ${sync_policy}
-
-# Dry run
-argocd app sync ${app_name} --dry-run
-
-# Deploy app
-argocd app sync ${app_name}
-
-# Setup sync policy and prune
-argocd app set ${app_name} --sync-policy automated --auto-prune
