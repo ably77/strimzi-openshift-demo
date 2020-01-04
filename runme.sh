@@ -2,6 +2,9 @@
 
 NAMESPACE="myproject"
 
+### deploy ArgoCD
+./argocd/runme.sh
+
 ### Create the project namespace
 oc new-project ${NAMESPACE}
 
@@ -44,9 +47,6 @@ oc create -f grafana-operator/deploy/crs/dashboards/ -n ${NAMESPACE}
 echo
 echo waiting for kafka deployment to complete
 ./extras/wait-for-condition.sh my-cluster-kafka-2 myproject
-
-### deploy ArgoCD
-./argocd/runme.sh
 
 ### deploy IoT demo application
 oc create -f argocd/iot-demo.yaml
