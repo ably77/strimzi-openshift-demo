@@ -9,8 +9,8 @@ oc delete pod kafka-consumer2 -n ${NAMESPACE}
 # Removing jobs and cronJobs
 oc delete -f jobs/generated/
 
-# Removing IoT demo
-oc delete all -l app=iot-demo
+# Removing Argo/IoT demo
+./argocd/uninstall.sh
 
 # Remove Kafka Topics
 oc delete kafkatopics --all

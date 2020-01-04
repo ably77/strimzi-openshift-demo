@@ -8,7 +8,7 @@ spec:
     replicas: 3
     resources:
       requests:
-        memory: "1000Mi"
+        memory: "1500Mi"
         cpu: "250m"
       limits:
         memory: "2000Mi"
