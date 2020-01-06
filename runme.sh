@@ -97,6 +97,14 @@ mkdir extras/manual_deploy/jobs/generated
 oc create -f extras/manual_deploy/jobs/generated/cron_job1.yaml -n ${NAMESPACE}
 oc create -f extras/manual_deploy/jobs/generated/cron_job2.yaml -n ${NAMESPACE}
 
+### Wait for IoT Demo
+./extras/wait-for-condition.sh consumer-app myproject
+
+### open IoT demo app route
+echo
+echo opening consumer-app route
+open http://$(oc get routes -n ${NAMESPACE} | grep consumer-app | awk '{ print $2 }')
+
 fi
 
 ### check grafana deployment status
