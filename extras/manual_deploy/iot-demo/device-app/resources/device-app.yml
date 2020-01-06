@@ -5,7 +5,7 @@ metadata:
   labels:
     app: iot-demo
 spec:
-  replicas: 30
+  replicas: 1
   template:
     metadata:
       labels:

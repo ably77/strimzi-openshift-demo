@@ -2,15 +2,20 @@
 
 NAMESPACE=myproject
 
-# Removing the consumer
+# Removing Argo/IoT demo
+./argocd/uninstall.sh
+
+# Removing the consumers if manually deployed
 oc delete pod kafka-consumer1 -n ${NAMESPACE}
 oc delete pod kafka-consumer2 -n ${NAMESPACE}
 
-# Removing jobs and cronJobs
-oc delete -f jobs/generated/
+# Removing jobs and cronJobs if manually deployed
+oc delete -f extras/manual_deploy/jobs/generated/ -n ${NAMESPACE}
 
-# Removing Argo/IoT demo
-./argocd/uninstall.sh
+# Removing iot-demo if manually deployed
+oc delete -f extras/manual_deploy/iot-demo/consumer-app/resources/ -n ${NAMESPACE}
+oc delete -f extras/manual_deploy/iot-demo/device-app/resources/ -n ${NAMESPACE}
+oc delete -f extras/manual_deploy/iot-demo/stream-app/resources/ -n ${NAMESPACE}
 
 # Remove Kafka Topics
 oc delete kafkatopics --all
@@ -37,5 +42,5 @@ oc delete -f https://github.com/strimzi/strimzi-kafka-operator/releases/download
 oc delete pvc --all -n myproject
 
 # Remove jobs and cronJobs from directory
-rm -rf jobs/generated
-mkdir jobs/generated
+rm -rf extras/manual_deploy/jobs/generated
+mkdir extras/manual_deploy/jobs/generated

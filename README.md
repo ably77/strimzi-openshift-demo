@@ -7,7 +7,6 @@
 ## Overview
 Apache Kafka is a highly scalable and performant distributed event streaming platform great for storing, reading, and analyzing streaming data. Originally created at LinkedIn, the project was open sourced to the Apache Foundation in 2011. Kafka enables companies looking to move from traditional batch processes over to more real-time streaming use cases.
 
-
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/architecture1.jpg)
 
 The diagram above is a common example of many fast-data (streaming) solutions today. With kafka as a core component of your architecture, multiple raw data sources can pipe data to Kafka, be analyzed in real-time by tools such as Apache Spark, and persisted or consumed by other microservices
@@ -51,7 +50,7 @@ Why Argo CD?
 - Application deployment and lifecycle management should be automated, auditable, and easy to understand.
 
 ## Prerequisites for Lab:
-- Multi Node Openshift/Kubernetes Cluster - (This guide is tested on 3x r5.xlarge workers)
+- Multi Node Openshift/Kubernetes Cluster - (This guide is tested on 2x r5.xlarge workers)
 - Admin Privileges (i.e. cluster-admin RBAC privileges or logged in as system:admin user)
 
 ## Running this Demo
@@ -101,17 +100,98 @@ Here you can see metrics such as:
 
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/grafana1.png)
 
-#### Demonstrating Continuous Delivery with ArgoCD
-Login to the ArgoCD console and navigate to the iot-demo application
+
+### Demonstrating the strimzi-loadtest Demo
+
+By default, the demo will deploy an example Strimzi loadtesting demo using ArgoCD based on ![this repo](https://github.com/ably77/strimzi-loadtest). This demo will create several topics `my-topic1` and `my-topic2` and deploy cronJobs and Jobs to these topics. You can leverage Github and argoCD in order to increase producer load, as well as watch logs of messages from the consumers.
+
+By default the cronJobs will have the following characteristics:
+- Parallelism: 1
+- Completions: 4
+- Schedule: every 2 minutes
+
+By default the Jobs will have the following characteristics:
+- Parallelism: 1
+- Completions: 50
+
+You can visualize the dynamic job creation through the Pods/Jobs tab in the Openshift Console as well as through the Grafana Dashboards provided.
+
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/cron1.png)
+
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/cron2.png)
+
+
+Navigate to the logs of a consumer to view incoming messages
+```
+oc logs -n myproject kafka-consumer1
+oc logs -n myproject kafka-consumer2
+```
+
+A single kafka topic can also handle many Producers sending many different messages to it, to demonstrate this you can look at `job1.yaml` and `job2.yaml`
+```
+$ cat job1.yaml
+<...>
+kafka-producer-perf-test --topic my-topic1 --num-records 2500000 --record-size 5
+
+$ cat job2.yaml
+<...>
+kafka-producer-perf-test --topic my-topic1 --num-records 2500000 --record-size 10
+```
+
+Navigate back to the logs of `kafka-consumer1` and you should see two streams of different record sizes being consumed on `my-topic1`. An example output is below
+```
+$ oc logs kafka-consumer1 -n myproject
+SSXVN
+SSXVN
+SSXVN
+SSXVN
+SSXVN
+SSXVNJHPDQ
+SSXVNJHPDQ
+SSXVNJHPDQ
+SSXVNJHPDQ
+```
+
+Navigate to the Openshift UI and demo through all of the orchestration of pods, jobs, monitoring, resource consumption, etc.
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/openshift1.png)
+
+If you are using Openshift 4 you can also see additional cluster level metrics for pods, for example our kafka broker `kafka-cluster-0`
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/openshift2.png)
+
+#### Demonstrating strimzi-loadtest demo in Grafana
+As part of the provided Grafana dashboards, you can also view more kafka-specific metrics for the strimzi-loadtest demo by filtering by the `my-topic1` or `my-topic2` topics
+
+Navigate back to the Grafana UI to see Kafka/Zookeeper specific metrics collected by Prometheus and how the Jobs that we deployed in our demo can be visualized in real-time. Select and filter the topic to  in order to see specific metrics for the strimzi-loadtest demo
+
+Here you can see metrics such as:
+- Kafka broker CPU/MEM usage
+- JVM statistics
+- Incoming/Outgoing byte and message rates
+- Log Size
+
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/grafana2.png)
+
+
+### Demonstrating Continuous Delivery with ArgoCD
+
+
+To login to the ArgoCD console and navigate to the iot-demo application
 ```
 username: admin
 password: secret
 ```
 
-Here you should see the topology of the IoT demo application
+Here you should see the existing argocd applications: the IoT demo application as well as the strimzi-loadtest applications
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/argo1.png)
 
-By default, the repo is set up to deploy the IoT demo app based off of my personal repo (https://github.com/ably77/iot-argocd). If you want to demonstrate and control git push to drive continuous delivery, fork this repository and re-direct to your own personal github.
+If you click select the application you should see the topology of the application and more details
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/argo1.png)
+
+By default, the repo is set up to deploy the IoT demo app based off of my personal repos
+- https://github.com/ably77/iot-argocd
+- https://github.com/ably77/strimzi-loadtest
+
+If you want to demonstrate and control git push to drive continuous delivery, fork this repository and re-direct to your own personal github.
 
 First uninstall the existing iot-demo app:
 ```
@@ -123,7 +203,7 @@ You can add your repo using the argoCD CLI
 argocd repo add <GITHUB_REPO_URL_HERE>
 ```
 
-You can set the `repoURL` variable in the the `argocd/iot-demo.yaml` manifest before deploying this demo
+You can set the `repoURL` variable in the the `argocd/iot-demo.yaml` as well as the `argocd/strimzi-loadtest.yaml` manifests before re-deploying this demo
 ```
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -139,6 +219,7 @@ spec:
 Redeploy the application
 ```
 oc create -f argocd/iot-demo.yaml -n myproject
+oc create -f argocd/strimzi-loadtest.yaml -n myproject
 ```
 
 Now you can make corresponding changes to the IoT github repo, such as increasing replicas of the `device-app.yml` from 30 to 50
@@ -164,71 +245,6 @@ device-app                   50/50   50           50          12m
 You will also see the number of devices reflected in the IoT consumer app dashboard
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/iot3.png)
 
-## Bonus
-
-By default, this demo will generate a few Jobs and CronJobs in the `jobs/generated` directory and will deploy `cron_job1.yaml`. These jobs leverage the client tools built into kafka itself in order to demonstrate producing test messages as well as consuming them.
-
-By default the cronJobs will have the following characteristics:
-- Parallelism: 1
-- Completions: 4
-- Schedule: every 2 minutes
-
-You can visualize the dynamic job creation through the Pods/Jobs tab in the Openshift Console as well as through the Grafana Dashboards provided.
-
-![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/cron1.png)
-
-![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/cron2.png)
-
-To start a consumer to view incoming `my-topic1` messages
-```
-./extras/consumer1.sh
-```
-
-To start a consumer to view incoming `my-topic2` messages
-```
-./extras/consumer2.sh
-```
-
-Navigate to the logs of a consumer to view incoming messages
-```
-oc logs -n myproject kafka-consumer1
-oc logs -n myproject kafka-consumer2
-```
-
-A single kafka topic can also handle many Producers sending many different messages to it, to demonstrate this you can run `job3.yaml`
-```
-oc create -n myproject -f jobs/generated/job3.yaml
-```
-
-Taking a look at the `job3.yaml` compared to `job1.yaml` you can see that the only difference is in record-size
-```
---record-size 10
-```
-
-Navigate back to the logs of `kafka-consumer1` and you should see two streams of different record sizes being consumed on `my-topic1`. An example output is below
-```
-$ oc logs kafka-consumer1 -n myproject
-SSXVN
-SSXVN
-SSXVN
-SSXVN
-SSXVN
-SSXVNJHPDQ
-SSXVNJHPDQ
-SSXVNJHPDQ
-SSXVNJHPDQ
-```
-
-Navigate to the Openshift UI and demo through all of the orchestration of pods, jobs, monitoring, resource consumption, etc.
-![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/openshift1.png)
-
-If you are using Openshift 4 you can also see additional cluster level metrics for pods, for example our kafka broker `kafka-cluster-0`
-![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/openshift2.png)
-
-Navigate back to the Grafana UI to see Kafka/Zookeeper specific metrics collected by Prometheus and how the Jobs that we deployed in our demo can be visualized in real-time
-![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/openshift3.png)
-
-
 ### Additional Useful Commands:
 
 #### Strimzi
@@ -241,11 +257,6 @@ oc get kafkatopic
 To scale your Kafka cluster up, add a broker using the commmand below and modify the `replicas:3 --> 4` for kafka brokers
 ```
 oc edit -f strimzi-operator/deploy/crs/kafka-cluster-3broker.yaml -n myproject
-```
-
-To edit your topic (i.e. adding topic parameters or scaling up partitions)
-```
-oc edit -f strimzi-operator/deploy/crs/my-topic1.yaml
 ```
 
 Check out the ![Official Documentation](https://strimzi.io/documentation/) for strimzi for additional documentation
@@ -281,12 +292,10 @@ Uninstall the ArgoCD portion of this demo and re-run the whole script
 ./runme.sh
 ```
 
-Alternatively, you can just run the iot-demo app without ArgoCD
+#### Running without ArgoCD
+If you would like to run the entire demo without any ArgoCD components, just simply switch the variable in the `runme.sh` script:
 ```
-oc create -f extras/archive/iot-demo/consumer-app/resources/consumer-app.yml -n myproject
-oc create -f extras/archive/iot-demo/device-app/resources/device-app.yml -n myproject
-oc create -f extras/archive/iot-demo/stream-app/resources/stream-app.yml -n myproject
-oc create -f extras/archive/iot-demo/stream-app/resources/topics.yml -n myproject
+ARGOCD_ENABLED="false"
 ```
 
 ## Uninstall

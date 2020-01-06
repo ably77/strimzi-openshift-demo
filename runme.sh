@@ -2,6 +2,9 @@
 
 NAMESPACE="myproject"
 
+# Modules
+ARGOCD_ENABLED="true"
+
 ### Create the project namespace
 oc new-project ${NAMESPACE}
 
@@ -45,40 +48,25 @@ echo
 echo waiting for kafka deployment to complete
 ./extras/wait-for-condition.sh my-cluster-kafka-2 myproject
 
+#### If ArgoCD Demo is Enabled ####
+if [ "$ARGOCD_ENABLED" = "true" ]; then
+
 ### deploy ArgoCD
 ./argocd/runme.sh
 
-### SUPER HACKY BUG FIX - uninstall and reinstall
+### SUPER HACKY BUG FIX (BUT WORKS) - uninstall and reinstall
 ./argocd/uninstall.sh
 ./argocd/runme.sh
 
-### deploy IoT demo application
+### deploy IoT demo application in argocd
 oc create -f argocd/iot-demo.yaml
 
-### make jobs/generated if it doesnt exist
-mkdir jobs/generated
-
-### setup kafka jobs with correct NodeIP service addresses
-./jobs/setup_cron.sh
-./jobs/setup_jobs.sh
-
-### deploy kafka jobs
-oc create -f jobs/generated/cron_job1.yaml -n ${NAMESPACE}
-oc create -f jobs/generated/cron_job2.yaml -n ${NAMESPACE}
-
-### check grafana deployment status
-echo
-echo checking to see if the grafana deployment is Running before opening route
-./extras/wait-for-condition.sh grafana-deployment ${NAMESPACE}
+### deploy strimzi loadtesting demo in argocd
+oc create -f argocd/strimzi-loadtest.yaml
 
 ### Open argocd route
 argocd_route=$(oc -n argocd get route argocd-server -o jsonpath='{.spec.host}')
 open http://${argocd_route}
-
-### open grafana route
-echo
-echo opening grafana route
-open https://$(oc get routes -n ${NAMESPACE} | grep grafana-route | awk '{ print $2 }')
 
 ### Wait for IoT Demo
 ./extras/wait-for-condition.sh consumer-app myproject
@@ -87,6 +75,39 @@ open https://$(oc get routes -n ${NAMESPACE} | grep grafana-route | awk '{ print
 echo
 echo opening consumer-app route
 open http://$(oc get routes -n ${NAMESPACE} | grep consumer-app | awk '{ print $2 }')
+
+fi
+
+#### If ArgoCD Demo is Disabled ####
+if [ "$ARGOCD_ENABLED" = "false" ]; then
+
+oc create -f extras/manual_deploy/iot-demo/consumer-app/resources/consumer-app.yml -n ${NAMESPACE}
+oc create -f extras/manual_deploy/iot-demo/device-app/resources/device-app.yml -n ${NAMESPACE}
+oc create -f extras/manual_deploy/iot-demo/stream-app/resources/stream-app.yml -n ${NAMESPACE}
+oc create -f extras/manual_deploy/iot-demo/stream-app/resources/topics.yml -n ${NAMESPACE}
+
+### make jobs/generated if it doesnt exist
+mkdir extras/manual_deploy/jobs/generated
+
+### setup kafka jobs with correct NodeIP service addresses
+./extras/manual_deploy/jobs/setup_cron.sh
+./extras/manual_deploy/jobs/setup_jobs.sh
+
+### deploy kafka jobs
+oc create -f extras/manual_deploy/jobs/generated/cron_job1.yaml -n ${NAMESPACE}
+oc create -f extras/manual_deploy/jobs/generated/cron_job2.yaml -n ${NAMESPACE}
+
+fi
+
+### check grafana deployment status
+echo
+echo checking to see if the grafana deployment is Running before opening route
+./extras/wait-for-condition.sh grafana-deployment ${NAMESPACE}
+
+### open grafana route
+echo
+echo opening grafana route
+open https://$(oc get routes -n ${NAMESPACE} | grep grafana-route | awk '{ print $2 }')
 
 ### end
 echo

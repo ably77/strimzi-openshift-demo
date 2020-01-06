@@ -3,11 +3,16 @@
 # argo deployment varaiables
 argo_namespace="argocd"
 argo_route="argocd-server"
-app_name="iot-demo"
 argo_version="1.3.6"
 
-# delete app
-argocd app delete ${app_name}
+app1_name="iot-demo"
+app2_name="strimzi-loadtest"
+
+# delete app1
+argocd app delete ${app1_name}
+
+# delete app2
+argocd app delete ${app2_name}
 
 oc delete -f https://raw.githubusercontent.com/argoproj/argo-cd/v${argo_version}/manifests/install.yaml -n ${argo_namespace}
 
