@@ -6,7 +6,41 @@ NAMESPACE="myproject"
 ARGOCD_ENABLED="true"
 
 ### Create the project namespace
+echo creating project: ${NAMESPACE}
 oc new-project ${NAMESPACE}
+
+#### Create Grafana CRDs
+oc create -f grafana-operator/deploy/crds -n ${NAMESPACE}
+
+
+#### If ArgoCD Demo is Enabled - Platform Configuration ####
+if [ "$ARGOCD_ENABLED" = "true" ]; then
+echo deploying argoCD
+
+### deploy ArgoCD
+./argocd/runme.sh
+
+### SUPER HACKY BUG FIX (BUT WORKS) - uninstall and reinstall
+./argocd/uninstall.sh
+./argocd/runme.sh
+
+### Open argocd route
+argocd_route=$(oc -n argocd get route argocd-server -o jsonpath='{.spec.host}')
+open http://${argocd_route}
+
+### deploy grafana in argocd
+echo deploying grafana
+oc create -f argocd/strimzi-demo-grafana.yaml
+
+### deploy prometheus in argocd
+echo deploying prometheus
+oc create -f argocd/strimzi-demo-prometheus.yaml
+
+fi
+
+
+#### Deploy Kafka ####
+echo deploying kafka
 
 ### Deploy Strimzi Operator
 oc apply -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.15.0/strimzi-cluster-operator-0.15.0.yaml -n ${NAMESPACE}
@@ -17,40 +51,25 @@ oc create -f strimzi-operator/deploy/crs/deployments/kafka-cluster-3broker-ephem
 ### Create Kafka Topics
 oc create -f strimzi-operator/deploy/crs/topics/ -n ${NAMESPACE}
 
-#### Create Grafana CRDs
-oc create -f grafana-operator/deploy/crds -n ${NAMESPACE}
-
-
-#### If ArgoCD Demo is Enabled ####
-if [ "$ARGOCD_ENABLED" = "true" ]; then
-
-### deploy ArgoCD
-./argocd/runme.sh
-
-### SUPER HACKY BUG FIX (BUT WORKS) - uninstall and reinstall
-./argocd/uninstall.sh
-./argocd/runme.sh
-
-### deploy prometheus in argocd
-oc create -f argocd/strimzi-demo-prometheus.yaml
-
-### deploy grafana in argocd
-oc create -f argocd/strimzi-demo-grafana.yaml
-
 ### check kafka deployment status
-echo
 echo waiting for kafka deployment to complete
 ./extras/wait-for-condition.sh my-cluster-kafka-2 ${NAMESPACE}
 
+
+#### If ArgoCD Demo is Enabled - App Deployment ####
+if [ "$ARGOCD_ENABLED" = "true" ]; then
+
+### check grafana deployment status
+echo checking grafana deployment status before deploying applications
+./extras/wait-for-condition.sh grafana-deployment ${NAMESPACE}
+
 ### deploy IoT demo application in argocd
+echo creating iot-demo app in argocd
 oc create -f argocd/iot-demo.yaml
 
 ### deploy strimzi loadtesting demo in argocd
+echo creating strimzi-loadtest demo in argocd
 oc create -f argocd/strimzi-loadtest.yaml
-
-### Open argocd route
-argocd_route=$(oc -n argocd get route argocd-server -o jsonpath='{.spec.host}')
-open http://${argocd_route}
 
 fi
 
@@ -78,7 +97,6 @@ oc create -f grafana-operator/deploy/crs/deployment/grafana-cr.yaml -n ${NAMESPA
 oc create -f grafana-operator/deploy/crs/dashboards/ -n ${NAMESPACE}
 
 ### check kafka deployment status
-echo
 echo waiting for kafka deployment to complete
 ./extras/wait-for-condition.sh my-cluster-kafka-2 myproject
 
@@ -104,18 +122,16 @@ fi
 ./extras/wait-for-condition.sh consumer-app myproject
 
 ### open IoT demo app route
-echo
 echo opening consumer-app route
 open http://$(oc get routes -n ${NAMESPACE} | grep consumer-app | awk '{ print $2 }')
 
 ### check grafana deployment status
+echo checking grafana deployment status before opening route
 ./extras/wait-for-condition.sh grafana-deployment ${NAMESPACE}
 
 ### open grafana route
-echo
 echo opening grafana route
 open https://$(oc get routes -n ${NAMESPACE} | grep grafana-route | awk '{ print $2 }')
 
 ### end
-echo
 echo installation complete
