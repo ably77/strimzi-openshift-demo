@@ -6,8 +6,17 @@ NAMESPACE=myproject
 ./argocd/uninstall.sh
 
 # Removing the consumers if manually deployed
-oc delete pod kafka-consumer1 -n ${NAMESPACE}
-oc delete pod kafka-consumer2 -n ${NAMESPACE}
+oc delete deployment kafka-consumer1 -n ${NAMESPACE}
+oc delete deployment kafka-consumer2 -n ${NAMESPACE}
+
+# Removing the cronjobs if manually deployed
+oc delete cronjob cron-producer1 -n ${NAMESPACE}
+oc delete cronjob cron-producer2 -n ${NAMESPACE}
+
+# Removing the jobs if manually deployed
+oc delete job kafka-producer1 -n ${NAMESPACE}
+oc delete job kafka-producer2 -n ${NAMESPACE}
+oc delete job kafka-producer3 -n ${NAMESPACE}
 
 # Removing jobs and cronJobs if manually deployed
 oc delete -f extras/manual_deploy/jobs/generated/ -n ${NAMESPACE}

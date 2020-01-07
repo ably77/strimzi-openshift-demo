@@ -52,6 +52,8 @@ Why Argo CD?
 ## Prerequisites for Lab:
 - Multi Node Openshift/Kubernetes Cluster - (This guide is tested on 2x r5.xlarge workers)
 - Admin Privileges (i.e. cluster-admin RBAC privileges or logged in as system:admin user)
+- ArgoCLI Installed (see https://github.com/argoproj/argo-cd/blob/master/docs/cli_installation.md)
+- oc client installed (see https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/)
 
 ## Running this Demo
 If you have an Openshift cluster up and are authenticated to the CLI, just run the installation script below. The script itself has more detailed information on the steps and commands if you prefer to run through this demo manually.

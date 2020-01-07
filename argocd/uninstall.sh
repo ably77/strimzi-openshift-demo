@@ -9,10 +9,10 @@ app1_name="iot-demo"
 app2_name="strimzi-loadtest"
 
 # delete app1
-argocd app delete ${app1_name}
+argocd app delete ${app1_name} --cascade
 
 # delete app2
-argocd app delete ${app2_name}
+argocd app delete ${app2_name} --cascade 
 
 oc delete -f https://raw.githubusercontent.com/argoproj/argo-cd/v${argo_version}/manifests/install.yaml -n ${argo_namespace}
 
