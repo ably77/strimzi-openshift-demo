@@ -7,12 +7,13 @@ spec:
     version: 2.3.0
     replicas: 3
     resources:
-      requests:
-        memory: "1500Mi"
-        cpu: "250m"
-      limits:
-        memory: "2000Mi"
-        cpu: "400m"
+      resources:
+        requests:
+          memory: "1500Mi"
+          cpu: "400m"
+        limits:
+          memory: "2000Mi"
+          cpu: "500m"
     listeners:
       plain: {}
       tls: {}
@@ -221,8 +222,8 @@ spec:
     groupRegex: ".*"
     resources:
       requests:
-        memory: "64Mi"
-        cpu: "25m"
-      limits:
         memory: "128Mi"
         cpu: "50m"
+      limits:
+        memory: "256Mi"
+        cpu: "100m"

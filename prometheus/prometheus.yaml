@@ -76,10 +76,10 @@ spec:
         resources:
           requests:
             memory: "500Mi"
-            cpu: "75m"
+            cpu: "200m"
           limits:
             memory: "1000Mi"
-            cpu: "100m"
+            cpu: "300m"
         volumeMounts:
         - mountPath: /prometheus
           name: prometheus-data
