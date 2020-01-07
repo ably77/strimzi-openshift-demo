@@ -39,7 +39,7 @@ oc delete -f prometheus/prometheus.yaml -n ${NAMESPACE}
 # Delete Grafana:
 oc delete -f grafana-operator/deploy/crs/datasources/ -n ${NAMESPACE}
 oc delete -f grafana-operator/deploy/crs/dashboards/ -n ${NAMESPACE}
-oc delete -f grafana-operator/deploy/crs/deployment/grafana.yaml -n ${NAMESPACE}
+oc delete -f grafana-operator/deploy/crs/deployment/grafana-cr.yaml -n ${NAMESPACE}
 oc delete -f grafana-operator/deploy/operator.yaml -n ${NAMESPACE}
 oc delete -f grafana-operator/deploy/roles -n ${NAMESPACE}
 oc delete -f grafana-operator/deploy/crds -n ${NAMESPACE}

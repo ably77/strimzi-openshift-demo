@@ -6,7 +6,9 @@ new_password="secret"
 argo_version="1.3.6"
 repo1_url="https://github.com/ably77/iot-argocd"
 repo2_url="https://github.com/ably77/strimzi-loadtest"
-repo3_url="https://github.com/ably77/argocd-demo"
+repo3_url="https://github.com/ably77/strimzi-demo-prometheus"
+repo4_url="https://github.com/ably77/strimzi-demo-grafana"
+repo5_url="https://github.com/ably77/strimzi-demo-kafka"
 
 # Create a new namespace for ArgoCD components
 oc new-project ${argo_namespace}
@@ -46,3 +48,5 @@ argocd --insecure --grpc-web --server ${argocd_route}:443 account update-passwor
 argocd repo add ${repo1_url}
 argocd repo add ${repo2_url}
 argocd repo add ${repo3_url}
+argocd repo add ${repo4_url}
+argocd repo add ${repo5_url}

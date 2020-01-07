@@ -7,12 +7,20 @@ argo_version="1.3.6"
 
 app1_name="iot-demo"
 app2_name="strimzi-loadtest"
+app3_name="strimzi-demo-prometheus"
+app4_name="strimzi-demo-grafana"
 
 # delete app1
 argocd app delete ${app1_name} --cascade
 
 # delete app2
-argocd app delete ${app2_name} --cascade 
+argocd app delete ${app2_name} --cascade
+
+# delete app3
+argocd app delete ${app3_name} --cascade
+
+# delete app4
+argocd app delete ${app4_name} --cascade
 
 oc delete -f https://raw.githubusercontent.com/argoproj/argo-cd/v${argo_version}/manifests/install.yaml -n ${argo_namespace}
 
