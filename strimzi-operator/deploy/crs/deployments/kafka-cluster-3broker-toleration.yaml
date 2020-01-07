@@ -209,13 +209,6 @@ spec:
   entityOperator:
     topicOperator: {}
     userOperator: {}
-    resources:
-      requests:
-        memory: "32Mi"
-        cpu: "5m"
-      limits:
-        memory: "128Mi"
-        cpu: "20m"
   kafkaExporter:
     topicRegex: ".*"
     groupRegex: ".*"

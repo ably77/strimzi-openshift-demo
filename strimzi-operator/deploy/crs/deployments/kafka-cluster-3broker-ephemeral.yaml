@@ -7,13 +7,12 @@ spec:
     version: 2.3.0
     replicas: 3
     resources:
-      resources:
-        requests:
-          memory: "1500Mi"
-          cpu: "400m"
-        limits:
-          memory: "2000Mi"
-          cpu: "500m"
+      requests:
+        memory: "1500Mi"
+        cpu: "400m"
+      limits:
+        memory: "2000Mi"
+        cpu: "500m"
     listeners:
       plain: {}
       tls: {}
@@ -210,13 +209,6 @@ spec:
   entityOperator:
     topicOperator: {}
     userOperator: {}
-    resources:
-      requests:
-        memory: "32Mi"
-        cpu: "5m"
-      limits:
-        memory: "128Mi"
-        cpu: "20m"
   kafkaExporter:
     topicRegex: ".*"
     groupRegex: ".*"

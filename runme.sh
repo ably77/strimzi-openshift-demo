@@ -12,6 +12,9 @@ oc new-project ${NAMESPACE}
 #### Create Grafana CRDs
 oc create -f grafana-operator/deploy/crds -n ${NAMESPACE}
 
+### Deploy Strimzi Operator
+oc apply -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.15.0/strimzi-cluster-operator-0.15.0.yaml -n ${NAMESPACE}
+
 
 #### If ArgoCD Demo is Enabled - Platform Configuration ####
 if [ "$ARGOCD_ENABLED" = "true" ]; then
@@ -36,28 +39,13 @@ oc create -f argocd/strimzi-demo-grafana.yaml
 echo deploying prometheus
 oc create -f argocd/strimzi-demo-prometheus.yaml
 
-fi
-
-
-#### Deploy Kafka ####
-echo deploying kafka
-
-### Deploy Strimzi Operator
-oc apply -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.15.0/strimzi-cluster-operator-0.15.0.yaml -n ${NAMESPACE}
-
-### Provision the Apache Kafka Cluster
-oc create -f strimzi-operator/deploy/crs/deployments/kafka-cluster-3broker-ephemeral.yaml -n ${NAMESPACE}
-
-### Create Kafka Topics
-oc create -f strimzi-operator/deploy/crs/topics/ -n ${NAMESPACE}
+### deploy kafka in argocd
+echo deploying prometheus
+oc create -f argocd/strimzi-demo-kafka.yaml
 
 ### check kafka deployment status
 echo waiting for kafka deployment to complete
 ./extras/wait-for-condition.sh my-cluster-kafka-2 ${NAMESPACE}
-
-
-#### If ArgoCD Demo is Enabled - App Deployment ####
-if [ "$ARGOCD_ENABLED" = "true" ]; then
 
 ### check grafana deployment status
 echo checking grafana deployment status before deploying applications
@@ -96,9 +84,21 @@ oc create -f grafana-operator/deploy/crs/deployment/grafana-cr.yaml -n ${NAMESPA
 ### deploy dashboards
 oc create -f grafana-operator/deploy/crs/dashboards/ -n ${NAMESPACE}
 
+#### Deploy Kafka ####
+echo deploying kafka
+
+### Deploy Strimzi Operator
+oc apply -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.15.0/strimzi-cluster-operator-0.15.0.yaml -n ${NAMESPACE}
+
+### Provision the Apache Kafka Cluster
+oc create -f strimzi-operator/deploy/crs/deployments/kafka-cluster-3broker-pv.yaml -n ${NAMESPACE}
+
+### Create Kafka Topics
+oc create -f strimzi-operator/deploy/crs/topics/ -n ${NAMESPACE}
+
 ### check kafka deployment status
 echo waiting for kafka deployment to complete
-./extras/wait-for-condition.sh my-cluster-kafka-2 myproject
+./extras/wait-for-condition.sh my-cluster-kafka-2 ${NAMESPACE}
 
 oc create -f extras/manual_deploy/iot-demo/consumer-app/resources/consumer-app.yml -n ${NAMESPACE}
 oc create -f extras/manual_deploy/iot-demo/device-app/resources/device-app.yml -n ${NAMESPACE}
@@ -118,20 +118,16 @@ oc create -f extras/manual_deploy/jobs/generated/ -n ${NAMESPACE}
 fi
 
 
+### open grafana route
+echo opening grafana route
+open https://$(oc get routes -n ${NAMESPACE} | grep grafana-route | awk '{ print $2 }')
+
 ### Wait for IoT Demo
 ./extras/wait-for-condition.sh consumer-app myproject
 
 ### open IoT demo app route
 echo opening consumer-app route
 open http://$(oc get routes -n ${NAMESPACE} | grep consumer-app | awk '{ print $2 }')
-
-### check grafana deployment status
-echo checking grafana deployment status before opening route
-./extras/wait-for-condition.sh grafana-deployment ${NAMESPACE}
-
-### open grafana route
-echo opening grafana route
-open https://$(oc get routes -n ${NAMESPACE} | grep grafana-route | awk '{ print $2 }')
 
 ### end
 echo installation complete
