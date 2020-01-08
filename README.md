@@ -1,8 +1,13 @@
 # Openshift Strimzi Kafka Operator Demo - Multi-node Deployment (AWS)
-- Real-time Streaming Application with Console
-- ArgoCD driven Continuous Delivery
+- Real-time Streaming IoT Application with Console
+- ArgoCD driven Continuous Delivery for all components (Kafka, Grafana, Prometheus, load-testing demo, iot-demo app)
 - Prometheus metrics
 - Grafana Dashboards
+
+Optional:
+- Autoscaling
+- Infrastructure pinning
+- Run all components without ArgoCD
 
 ## Overview
 Apache Kafka is a highly scalable and performant distributed event streaming platform great for storing, reading, and analyzing streaming data. Originally created at LinkedIn, the project was open sourced to the Apache Foundation in 2011. Kafka enables companies looking to move from traditional batch processes over to more real-time streaming use cases.
@@ -56,7 +61,7 @@ Why Argo CD?
 - oc client installed (see https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/)
 
 ## Running this Demo
-If you have an Openshift cluster up and are authenticated to the CLI, just run the installation script below. The script itself has more detailed information on the steps and commands if you prefer to run through this demo manually.
+If you have an Openshift cluster up, `argocd` CLI installed, and are authenticated to the `oc` CLI just run the installation script below. The script itself has more commented information on the steps and commands if you prefer to run through this demo manually.
 ```
 ./runme.sh
 ```
@@ -189,23 +194,26 @@ Here you should see the existing argocd applications: the IoT demo application a
 If you click select the application you should see the topology of the application and more details
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/argo1.png)
 
-By default, the repo is set up to deploy the IoT demo app based off of my personal repos
+By default, the repo is set up to deploy the demo app based off of these repos below
 - https://github.com/ably77/iot-argocd
 - https://github.com/ably77/strimzi-loadtest
+- https://github.com/ably77/strimzi-demo-prometheus
+- https://github.com/ably77/strimzi-demo-grafana
+- https://github.com/ably77/strimzi-demo-kafka
 
-If you want to demonstrate and control git push to drive continuous delivery, fork this repository and re-direct to your own personal github.
+If you want to demonstrate and control git push to drive continuous delivery, fork this repository and re-direct to your own personal github. An example of doing so with the iot-demo app is below, but you can fork any of the repositories above if you want to demonstrate CD with that component. Only one fork is needed to effectively show Continuous Delivery in action.
 
-First uninstall the existing iot-demo app:
+First uninstall the existing iot-demo app deployment:
 ```
 oc delete -f argocd/iot-demo.yaml -n myproject
 ```
 
-You can add your repo using the argoCD CLI
+Next, add your repo using the argoCD CLI
 ```
 argocd repo add <GITHUB_REPO_URL_HERE>
 ```
 
-You can set the `repoURL` variable in the the `argocd/iot-demo.yaml` as well as the `argocd/strimzi-loadtest.yaml` manifests before re-deploying this demo
+Then set the `repoURL` variable in the `argocd/iot-demo.yaml` manifest to point at your own github URL before re-deploying the demo application
 ```
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -215,13 +223,12 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: <GITHUB_REPO_URL_HERE>
+    repoURL: <YOUR_GITHUB_REPO_URL_HERE>
 ```
 
-Redeploy the application
+Redeploy the application you've modified to argoCD
 ```
 oc create -f argocd/iot-demo.yaml -n myproject
-oc create -f argocd/strimzi-loadtest.yaml -n myproject
 ```
 
 Now you can make corresponding changes to the IoT github repo, such as increasing replicas of the `device-app.yml` from 30 to 50
@@ -281,24 +288,13 @@ Check out the ![Official Github](https://github.com/integr8ly/grafana-operator/t
 
 ## Troubleshooting
 
-#### ArgoCD Bug
-If you see the error
-```
-FATA[0000] rpc error: code = NotFound desc = the server could not find the requested resource (get applications.argoproj.io)
-```
-
-Uninstall the ArgoCD portion of this demo and re-run the whole script
-```
-./argocd/uninstall.sh
-
-./runme.sh
-```
-
 #### Running without ArgoCD
 If you would like to run the entire demo without any ArgoCD components, just simply switch the variable in the `runme.sh` script:
 ```
 ARGOCD_ENABLED="false"
 ```
+
+This will run the script off of the static files in the directories instead of deploying applications from ArgoCD
 
 ## Uninstall
 ```
