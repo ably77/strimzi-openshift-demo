@@ -9,7 +9,7 @@ app1_name="iot-demo"
 app2_name="strimzi-loadtest"
 app3_name="strimzi-demo-prometheus"
 app4_name="strimzi-demo-grafana"
-app4_name="strimzi-demo-kafka"
+app5_name="strimzi-demo-kafka"
 
 # delete app1
 argocd app delete ${app1_name} --cascade

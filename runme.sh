@@ -16,7 +16,7 @@ oc create -f grafana-operator/deploy/crds -n ${NAMESPACE}
 oc apply -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.15.0/strimzi-cluster-operator-0.15.0.yaml -n ${NAMESPACE}
 
 
-#### If ArgoCD Demo is Enabled - Platform Configuration ####
+#### If ArgoCD Demo is Enabled ####
 if [ "$ARGOCD_ENABLED" = "true" ]; then
 echo deploying argoCD
 
