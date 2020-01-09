@@ -1,4 +1,4 @@
-# Openshift Strimzi Kafka Operator Demo - Multi-node Deployment (AWS)
+# Openshift Strimzi Kafka Operator Demo - Multi-node Deployment
 - Real-time Streaming IoT Application with Console
 - ArgoCD driven Continuous Delivery for all components (Kafka, Grafana, Prometheus, load-testing demo, iot-demo app)
 - Prometheus metrics
