@@ -150,5 +150,8 @@ open https://$(oc get routes -n ${NAMESPACE} | grep grafana-route | awk '{ print
 echo opening consumer-app route
 open http://$(oc get routes -n ${NAMESPACE} | grep consumer-app | awk '{ print $2 }')
 
+### wait for codeready workspace to deploy
+#oc rollout status -w deployment/argocd-operator-helm -n argocd
+
 ### end
 echo installation complete
