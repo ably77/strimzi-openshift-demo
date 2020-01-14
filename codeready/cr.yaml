@@ -1,0 +1,67 @@
+metadata:
+  name: workspace
+projects:
+  - name: strimzi-openshift-demo
+    source:
+      location: 'https://github.com/ably77/strimzi-openshift-demo'
+      type: git
+      branch: master
+components:
+  - id: ms-vscode/go/latest
+    memoryLimit: 512Mi
+    type: chePlugin
+    alias: go-plugin
+  - mountSources: true
+    endpoints:
+      - name: 8080/tcp
+        port: 8080
+    memoryLimit: 512Mi
+    type: dockerimage
+    image: 'quay.io/eclipse/che-golang-1.12:nightly'
+    alias: go-cli
+    env:
+      - value: '/go:$(CHE_PROJECTS_ROOT)'
+        name: GOPATH
+      - value: /tmp/.cache
+        name: GOCACHE
+apiVersion: 1.0.0
+commands:
+  - name: run outyet
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/src/github.com/golang/example/outyet'
+        type: exec
+        command: go get -d && go run main.go
+        component: go-cli
+  - name: stop outyet
+    actions:
+      - type: exec
+        command: kill $(pidof go)
+        component: go-cli
+  - name: test outyet
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/src/github.com/golang/example/outyet'
+        type: exec
+        command: go test
+        component: go-cli
+  - name: run current file
+    actions:
+      - workdir: '${fileDirname}'
+        type: exec
+        command: 'go get -d && go run ${file}'
+        component: go-cli
+  - name: Debug current file
+    actions:
+      - referenceContent: |
+          {
+            "version": "0.2.0",
+            "configurations": [
+              {
+                "name": "Debug current file",
+                "type": "go",
+                "request": "launch",
+                "mode": "auto",
+                "program": "${fileDirname}",
+              },
+            ]
+          }
+        type: vscode-launch
