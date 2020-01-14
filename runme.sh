@@ -58,7 +58,7 @@ echo deploying prometheus
 oc create -f argocd/strimzi-demo-prometheus.yaml
 
 ### deploy codeready in argocd
-#oc create -f argocd/strimzi-demo-codeready.yaml
+oc create -f argocd/strimzi-demo-codeready.yaml
 
 ### deploy kafka in argocd
 echo deploying prometheus
