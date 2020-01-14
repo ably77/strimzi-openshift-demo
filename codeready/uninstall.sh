@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NAMESPACE=myproject
+NAMESPACE=che-operator
 
 oc delete -f deploy/crds/org_v1_che_cr.yaml -n ${NAMESPACE}
 

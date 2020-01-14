@@ -10,6 +10,7 @@ app2_name="strimzi-loadtest"
 app3_name="strimzi-demo-prometheus"
 app4_name="strimzi-demo-grafana"
 app5_name="strimzi-demo-kafka"
+app6_name="strimzi-demo-codeready"
 
 # delete app1
 argocd app delete ${app1_name} --cascade
@@ -25,6 +26,9 @@ argocd app delete ${app4_name} --cascade
 
 # delete app5
 argocd app delete ${app5_name} --cascade
+
+# delete app6
+argocd app delete ${app6_name} --cascade
 
 oc delete -f https://raw.githubusercontent.com/argoproj/argo-cd/v${argo_version}/manifests/install.yaml -n ${argo_namespace}
 

@@ -10,7 +10,10 @@ echo creating project: ${NAMESPACE}
 oc new-project ${NAMESPACE}
 
 #### Create Grafana CRDs
-oc create -f grafana-operator/deploy/crds -n ${NAMESPACE}
+oc create -f grafana-operator/deploy/crds
+
+#### Create CodeReady CRDs
+oc apply -f codeready/deploy/crds/org_v1_che_crd.yaml
 
 ### Deploy Strimzi Operator
 oc apply -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.15.0/strimzi-cluster-operator-0.15.0.yaml -n ${NAMESPACE}
@@ -53,6 +56,9 @@ oc create -f argocd/strimzi-demo-grafana.yaml
 ### deploy prometheus in argocd
 echo deploying prometheus
 oc create -f argocd/strimzi-demo-prometheus.yaml
+
+### deploy codeready in argocd
+#oc create -f argocd/strimzi-demo-codeready.yaml
 
 ### deploy kafka in argocd
 echo deploying prometheus
