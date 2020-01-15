@@ -5,6 +5,9 @@ NAMESPACE="myproject"
 # Modules
 ARGOCD_ENABLED="true"
 
+CODEREADY_DEVFILE_URL="https://raw.githubusercontent.com/ably77/strimzi-demo-codeready/master/dev-file/strimzi-demo-devfile.yaml"
+CODEREADY_NAMESPACE="codeready"
+
 ### Create the project namespace
 echo creating project: ${NAMESPACE}
 oc new-project ${NAMESPACE}
@@ -151,7 +154,12 @@ echo opening consumer-app route
 open http://$(oc get routes -n ${NAMESPACE} | grep consumer-app | awk '{ print $2 }')
 
 ### wait for codeready workspace to deploy
-#oc rollout status -w deployment/argocd-operator-helm -n argocd
+./extras/wait-for-rollout.sh deployment codeready codeready
+
+### create/open codeready workspace from custom URL dev-file.yaml
+echo deploying codeready workspace
+CHE_HOST=$(oc get routes -n ${CODEREADY_NAMESPACE} | grep codeready-codeready | awk '{ print $2 }')
+open http://${CHE_HOST}/f?url=${CODEREADY_DEVFILE_URL}
 
 ### end
 echo installation complete
