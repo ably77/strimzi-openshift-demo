@@ -185,9 +185,13 @@ Here you can see metrics such as:
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/grafana2.png)
 
 ### Demonstrating Codeready Workspaces
-By default, this demo will deploy Openshift Codeready Workspaces as well as a pre-configured workspace with all of the repositories from this demo to work on. The Codeready workspace provided has a full-featured CLI integrated IDE that can be used to continue on with your demonstration. First it will be important to login, this can be done by providing the `oc login` command that can be found in the link at the top right of the main Openshift Dashboard
+By default, this demo will deploy Openshift Codeready Workspaces as well as a pre-configured workspace with all of the repositories from this demo to work on.
 
-The login command will look similar to below
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/codeready1.png)
+
+The Codeready workspace provided has a full-featured CLI integrated IDE that can be used to continue on with your demonstration. First it will be important to login, this can be done by providing the `oc login` command that can be found in the link at the top right of the main Openshift Dashboard
+
+The oc login command will look similar to below
 ```
 oc login --token=vekO8irE5sCkFKdHfMPW4eDcD40200S7t9aCopEGQfw --server=https://api.strimzi-demo-cluster.redhat.com:6443
 ```
