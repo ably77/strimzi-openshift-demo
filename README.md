@@ -87,6 +87,8 @@ This quick script will:
 - Open IoT Sensors Demo App Route
 - Generate sample Kafka Producer jobs and cronJobs with correct network routing (/jobs/generated/)
 - Deploy sample cronJob1 and cronJob2
+- Deploy CodeReady Workspaces
+- Create an Eclipse Che cluster with demo this demo's repositories
 
 
 ### Demonstrating the IoT Demo
