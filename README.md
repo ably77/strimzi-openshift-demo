@@ -185,11 +185,25 @@ Here you can see metrics such as:
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/grafana2.png)
 
 ### Demonstrating Codeready Workspaces
-By default, this demo will deploy Openshift Codeready Workspaces as well as a pre-configured workspace with all of the repositories from this demo to work on.
+By default, this demo will deploy Openshift Codeready Workspaces as well as a pre-configured workspace with all of the repositories from this demo to work on. The first step will be to register a new user, fill in the form with any information that you desire and login to the user that you create.
 
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/codeready1.png)
 
+Once you create your user, you should see a workspace automatically being created for you. This is a feature of Codeready Workspaces that helps to [make a workspace portable by using a devfile](https://access.redhat.com/documentation/en-us/red_hat_codeready_workspaces/2.0/html/end-user_guide/workspaces-overview#making-a-workspace-portable-using-a-devfile_crw). In our case we are using the `/f?url=` API in order to [Create a workspace from a publicly accessible standalone devfile](https://access.redhat.com/documentation/en-us/red_hat_codeready_workspaces/2.0/html/end-user_guide/workspaces-overview#creating-a-workspace-from-a-publicly-accessible-standalone-devfile-using-http_configuring-a-workspace-using-a-devfile)
+
+The location of the devfile is in [this](https://github.com/ably77/strimzi-demo-codeready/blob/master/dev-file/strimzi-demo-devfile.yaml) public github repository.
+
+If you take a look at the `runme.sh` script you can see how this workspace is instantiated:
+```
+CHE_HOST=$(oc get routes -n ${CODEREADY_NAMESPACE} | grep codeready-codeready | awk '{ print $2 }')
+open http://${CHE_HOST}/f?url=${CODEREADY_DEVFILE_URL}
+```
+
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/codeready2.png)
+
 The Codeready workspace provided has a full-featured CLI integrated IDE that can be used to continue on with your demonstration. First it will be important to login, this can be done by providing the `oc login` command that can be found in the link at the top right of the main Openshift Dashboard
+
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/codeready3.png)
 
 The oc login command will look similar to below
 ```
