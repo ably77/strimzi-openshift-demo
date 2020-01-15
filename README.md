@@ -51,12 +51,33 @@ It can deploy and manage a Grafana instance on Kubernetes and OpenShift. The fol
 * Import Grafana datasources from the same namespace
 * Install Plugins (panels) defined as dependencies of dashboards
 
+Why Grafana?
+- Quickly becoming a de-facto standard in cloud-native monitoring
+- Strong community support
+
 #### ArgoCD Operator
 Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes.
 
 Why Argo CD?
 - Application definitions, configurations, and environments should be declarative and version controlled.
 - Application deployment and lifecycle management should be automated, auditable, and easy to understand.
+
+#### Codeready Workspaces Operator
+Red Hat CodeReady Workspaces is a developer workspace server and cloud IDE. Workspaces are defined as project code files and all of their dependencies neccessary to edit, build, run, and debug them. Each workspace has its own private IDE hosted within it. The IDE is accessible through a browser. The browser downloads the IDE as a single-page web application.
+
+Red Hat CodeReady Workspaces provides:
+- Workspaces that include runtimes and IDEs
+- RESTful workspace server
+- A browser-based IDE
+- Plugins for languages, framework, and tools
+- An SDK for creating plugins and assemblies
+
+Why CodeReady Workspaces?
+- Pre-configured workspaces allow for quicker onboarding of users onto the platform
+- Removal of local development workflows
+- Develop solutions on the same platform that is running them
+- Maintain security of intellectual property (IP) on the platform itself
+- Fully capable web-based IDE allows users to work wherever there is internet and browser access
 
 ## Prerequisites for Lab:
 - Multi Node Openshift/Kubernetes Cluster - (This guide is tested on 2x r5.xlarge workers)
@@ -185,7 +206,9 @@ Here you can see metrics such as:
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/grafana2.png)
 
 ### Demonstrating Codeready Workspaces
-By default, this demo will deploy Openshift Codeready Workspaces as well as a pre-configured workspace with all of the repositories from this demo to work on. The first step will be to register a new user, fill in the form with any information that you desire and login to the user that you create.
+By default, this demo will deploy Openshift Codeready Workspaces as well as a pre-configured workspace with all of the repositories from this demo to work on. You can also connect the IDE to your own github account so that if you make any changes to the repos you can make push/pull requests to the repo. This is a very powerful feature because it allows companies to remove the need to develop on a local machine first. This opens up many opportunities for efficiency and productivity increases because development is created and tested on the same platform that it is run on. It also adds a layer of security for large organizations that want to protect their IP.
+
+The first step will be to register a new user, fill in the form with any information that you desire and login to the user that you create.
 
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/codeready1.png)
 
@@ -210,16 +233,17 @@ The oc login command will look similar to below
 oc login --token=vekO8irE5sCkFKdHfMPW4eDcD40200S7t9aCopEGQfw --server=https://api.strimzi-demo-cluster.redhat.com:6443
 ```
 
-Once logged in you can install/uninstall/re-run all components of this demo as if you were using your own local machine
+Once logged in you can install/uninstall/re-run all components of this demo as if you were using your own local machine. For example, you can remove the re-create the iot-demo app
 ```
-./runme.sh
+$ oc delete -f argocd/iot-demo.yaml
+application.argoproj.io "iot-demo" deleted
 
-or
-
-./uninstall.sh
+$ oc create -f argocd/iot-demo.yaml
+application.argoproj.io/iot-demo created
 ```
 
-You can also connect the IDE to your own github account so that if you make any changes to the repos you can make push/pull requests to the master
+Check back to your argoCD UI or the Openshift UI in order to see deployment changes related to the iot-demo app
+
 
 See the [CodeReady Workspaces 2.0 End User Guide](https://access.redhat.com/documentation/en-us/red_hat_codeready_workspaces/2.0/html/end-user_guide/index) for more official documentation on what you can do with CodeReady workspaces
 
