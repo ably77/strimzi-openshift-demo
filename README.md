@@ -3,6 +3,7 @@
 - ArgoCD driven Continuous Delivery for all components (Kafka, Grafana, Prometheus, load-testing demo, iot-demo app)
 - Prometheus metrics
 - Grafana Dashboards
+- CodeReady Workspaces
 
 Optional:
 - Autoscaling
