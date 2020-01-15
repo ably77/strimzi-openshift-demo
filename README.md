@@ -3,6 +3,7 @@
 - ArgoCD driven Continuous Delivery for all components (Kafka, Grafana, Prometheus, load-testing demo, iot-demo app)
 - Prometheus metrics
 - Grafana Dashboards
+- CodeReady Workspaces
 
 Optional:
 - Autoscaling
@@ -86,6 +87,8 @@ This quick script will:
 - Open IoT Sensors Demo App Route
 - Generate sample Kafka Producer jobs and cronJobs with correct network routing (/jobs/generated/)
 - Deploy sample cronJob1 and cronJob2
+- Deploy CodeReady Workspaces
+- Create an Eclipse Che cluster with demo this demo's repositories
 
 
 ### Demonstrating the IoT Demo
@@ -181,9 +184,28 @@ Here you can see metrics such as:
 
 ![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/grafana2.png)
 
+### Demonstrating Codeready Workspaces
+By default, this demo will deploy Openshift Codeready Workspaces as well as a pre-configured workspace with all of the repositories from this demo to work on. The Codeready workspace provided has a full-featured CLI integrated IDE that can be used to continue on with your demonstration. First it will be important to login, this can be done by providing the `oc login` command that can be found in the link at the top right of the main Openshift Dashboard
+
+The login command will look similar to below
+```
+oc login --token=vekO8irE5sCkFKdHfMPW4eDcD40200S7t9aCopEGQfw --server=https://api.strimzi-demo-cluster.redhat.com:6443
+```
+
+Once logged in you can install/uninstall/re-run all components of this demo as if you were using your own local machine
+```
+./runme.sh
+
+or
+
+./uninstall.sh
+```
+
+You can also connect the IDE to your own github account so that if you make any changes to the repos you can make push/pull requests to the master
+
+See the [CodeReady Workspaces 2.0 End User Guide](https://access.redhat.com/documentation/en-us/red_hat_codeready_workspaces/2.0/html/end-user_guide/index) for more official documentation on what you can do with CodeReady workspaces
 
 ### Demonstrating Continuous Delivery with ArgoCD
-
 
 To login to the ArgoCD console and navigate to the iot-demo application
 ```
