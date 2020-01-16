@@ -3,7 +3,7 @@
 # argo deployment varaiables
 argo_namespace="argocd"
 new_password="secret"
-argo_version="1.3.6"
+argo_version="1.4.0-rc1"
 repo1_url="https://github.com/ably77/iot-argocd"
 repo2_url="https://github.com/ably77/strimzi-loadtest"
 repo3_url="https://github.com/ably77/strimzi-demo-prometheus"

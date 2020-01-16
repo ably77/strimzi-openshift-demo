@@ -44,10 +44,6 @@ echo now deploying argoCD
 ### deploy ArgoCD
 ./argocd/runme.sh
 
-### SUPER HACKY BUG FIX (BUT WORKS) - uninstall and reinstall
-./argocd/uninstall.sh
-./argocd/runme.sh
-
 ### Open argocd route
 argocd_route=$(oc -n argocd get route argocd-server -o jsonpath='{.spec.host}')
 open http://${argocd_route}
