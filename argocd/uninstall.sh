@@ -3,7 +3,7 @@
 # argo deployment varaiables
 argo_namespace="argocd"
 argo_route="argocd-server"
-argo_version="1.4.0-rc1"
+argo_version="1.3.6"
 
 app1_name="iot-demo"
 app2_name="strimzi-loadtest"
@@ -29,6 +29,12 @@ argocd app delete ${app5_name} --cascade
 
 # delete app6
 argocd app delete ${app6_name} --cascade
+
+oc delete -f argocd/strimzi-demo-codeready.yaml
+oc delete -f argocd/strimzi-demo-prometheus.yaml
+oc delete -f argocd/strimzi-demo-kafka.yaml
+oc delete -f argocd/strimzi-demo-grafana.yaml
+oc delete -f argocd/strimzi-loadtest.yaml
 
 oc delete -f https://raw.githubusercontent.com/argoproj/argo-cd/v${argo_version}/manifests/install.yaml -n ${argo_namespace}
 

@@ -41,12 +41,18 @@ fi
 
 echo now deploying argoCD
 
+### use project argocd
+oc project argocd
+
 ### deploy ArgoCD
 ./argocd/runme.sh
 
 ### Open argocd route
 argocd_route=$(oc -n argocd get route argocd-server -o jsonpath='{.spec.host}')
 open http://${argocd_route}
+
+echo sleeping 10 seconds before deploying argo apps
+sleep 10
 
 ### deploy grafana in argocd
 echo deploying grafana
