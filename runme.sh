@@ -144,14 +144,16 @@ fi
 
 ### open grafana route
 echo opening grafana route
-open https://$(oc get routes -n ${NAMESPACE} | grep grafana-route | awk '{ print $2 }')
+grafana_route=$(oc get routes -n ${NAMESPACE} | grep grafana-route | awk '{ print $2 }')
+open https://${grafana_route}
 
 ### Wait for IoT Demo
 ./extras/wait-for-condition.sh consumer-app myproject
 
 ### open IoT demo app route
 echo opening consumer-app route
-open http://$(oc get routes -n ${NAMESPACE} | grep consumer-app | awk '{ print $2 }')
+iot_route=$(oc get routes -n ${NAMESPACE} | grep consumer-app | awk '{ print $2 }')
+open http://${iot_route}
 
 #fix this
 oc project codeready
@@ -166,7 +168,20 @@ open http://${CHE_HOST}/f?url=${CODEREADY_DEVFILE_URL}
 
 ### end
 echo
-echo argocd login: admin/secret
-echo codeready workspaces: create a new user to initiate workspace build
-echo
 echo installation complete
+echo
+echo
+echo links to console routes:
+echo
+echo iot demo console:
+echo http://${iot_route}
+echo
+echo grafana dashboards:
+echo https://${grafana_route}
+echo
+echo argocd console:
+echo argocd login: admin/secret
+echo http://${argocd_route}
+echo
+echo codeready workspaces: create a new user to initiate workspace build
+echo http://${CHE_HOST}/f?url=${CODEREADY_DEVFILE_URL}
