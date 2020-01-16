@@ -153,6 +153,9 @@ open https://$(oc get routes -n ${NAMESPACE} | grep grafana-route | awk '{ print
 echo opening consumer-app route
 open http://$(oc get routes -n ${NAMESPACE} | grep consumer-app | awk '{ print $2 }')
 
+#fix this
+oc project codeready
+
 ### wait for codeready workspace to deploy
 ./extras/wait-for-rollout.sh deployment codeready codeready
 
@@ -162,4 +165,8 @@ CHE_HOST=$(oc get routes -n ${CODEREADY_NAMESPACE} | grep codeready-codeready | 
 open http://${CHE_HOST}/f?url=${CODEREADY_DEVFILE_URL}
 
 ### end
+echo
+echo argocd login: admin/secret
+echo codeready workspaces: create a new user to initiate workspace build
+echo
 echo installation complete

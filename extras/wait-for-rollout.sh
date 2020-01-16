@@ -8,10 +8,10 @@ rollout_name=$2
 namespace=$3
 
 while [ "$OUTPUT" -ne 1 ]; do
-  OUTPUT=`oc get ${rollout_type}/${rollout_name} 2>/dev/null | grep -c ${rollout_name}`;
-  seconds=$((seconds+10))
+  OUTPUT=`oc get ${rollout_type}/${rollout_name} -n ${namespace} 2>/dev/null | grep -c ${rollout_name}`;
+  seconds=$((seconds+5))
   printf "Waiting %s seconds for ${rollout_type} ${rollout_name} to come up.\n" "${seconds}"
-  sleep 10
+  sleep 5
 done
 
 oc rollout status ${rollout_type}/${rollout_name} -n ${namespace}
