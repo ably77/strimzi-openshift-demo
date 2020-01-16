@@ -222,11 +222,11 @@ CHE_HOST=$(oc get routes -n ${CODEREADY_NAMESPACE} | grep codeready-codeready | 
 open http://${CHE_HOST}/f?url=${CODEREADY_DEVFILE_URL}
 ```
 
-![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/codeready2.png)
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/codeready3.png)
 
 The Codeready workspace provided has a full-featured CLI integrated IDE that can be used to continue on with your demonstration. First it will be important to login, this can be done by providing the `oc login` command that can be found in the link at the top right of the main Openshift Dashboard
 
-![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/codeready3.png)
+![](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/codeready2.png)
 
 The oc login command will look similar to below
 ```
