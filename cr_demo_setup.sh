@@ -2,7 +2,7 @@
 
 # Codeready Parameters
 CODEREADY_DEVFILE_URL="https://raw.githubusercontent.com/ably77/strimzi-demo-codeready/master/dev-file/strimzi-demo-devfile.yaml"
-CODEREADY_NAMESPACE="codeready"-
+CODEREADY_NAMESPACE="codeready"
 
 #### Create Grafana CRDs
 oc create -f grafana-operator/deploy/crds
@@ -35,8 +35,8 @@ echo now deploying argoCD
 argocd_route=$(oc -n argocd get route argocd-server -o jsonpath='{.spec.host}')
 open http://${argocd_route}
 
-echo sleeping 10 seconds before deploying argo apps
-sleep 10
+### create codeready namespace
+oc new-project codeready
 
 ### deploy codeready in argocd
 oc create -f argocd/strimzi-demo-codeready.yaml
