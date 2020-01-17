@@ -4,7 +4,7 @@
 CODEREADY_DEVFILE_URL="https://raw.githubusercontent.com/ably77/strimzi-demo-codeready/master/dev-file/strimzi-demo-devfile.yaml"
 CODEREADY_NAMESPACE="codeready"
 
-# Don't change unless you change argocd/<app> namespace pointers
+# Don't change unless you change argocd/<app>.yaml namespace pointers
 KAFKA_NAMESPACE="myproject"
 GRAFANA_NAMESPACE="myproject"
 

@@ -86,10 +86,20 @@ Why CodeReady Workspaces?
 - oc client installed (see https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/)
 
 ## Running this Demo
+
+#### Running with ArgoCD and Codeready Workspaces - Deployment Workflow + Streaming App Platform Demo
 If you have an Openshift cluster up, `argocd` CLI installed, and are authenticated to the `oc` CLI just run the installation script below. The script itself has more commented information on the steps and commands if you prefer to run through this demo manually.
 ```
 ./runme.sh
 ```
+
+#### Running without ArgoCD - Streaming App Platform Demo
+If you would like to run the demo without any ArgoCD components
+```
+./no_argocd_runme.sh
+```
+
+This will run the script off of the static files in the directories instead of deploying applications from ArgoCD
 
 This quick script will:
 - Deploy the Strimzi Kafka Operator
@@ -354,14 +364,6 @@ oc get grafanadatasources
 Check out the ![Official Github](https://github.com/integr8ly/grafana-operator/tree/master/documentation) for integr8ly for additional documentation
 
 ## Troubleshooting
-
-#### Running without ArgoCD
-If you would like to run the entire demo without any ArgoCD components, just simply switch the variable in the `runme.sh` script:
-```
-ARGOCD_ENABLED="false"
-```
-
-This will run the script off of the static files in the directories instead of deploying applications from ArgoCD
 
 ## Uninstall
 ```
