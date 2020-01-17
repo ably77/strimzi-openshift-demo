@@ -8,6 +8,9 @@ CODEREADY_NAMESPACE="codeready"
 KAFKA_NAMESPACE="myproject"
 GRAFANA_NAMESPACE="myproject"
 
+### Check if user is kube:admin
+./extras/check_user.sh
+
 ### Check if argocd CLI is installed
 ARGOCLI=$(which argocd)
 echo checking if argocd CLI is installed
