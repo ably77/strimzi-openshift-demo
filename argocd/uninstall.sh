@@ -34,6 +34,11 @@ argocd app delete ${app6_name} --cascade
 # delete app7
 argocd app delete ${app7_name} --cascade
 
+# Wait for app deletion
+./extras/wait-for-argo-app-deletion.sh
+
+# delete argocd
 oc delete -f https://raw.githubusercontent.com/argoproj/argo-cd/v${argo_version}/manifests/install.yaml -n ${argo_namespace}
 
+# delete route
 oc delete routes ${argo_route} -n ${argo_namespace}
