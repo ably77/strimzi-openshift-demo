@@ -78,10 +78,6 @@ echo
 echo grafana dashboards:
 echo https://${grafana_route}
 echo
-echo argocd console:
-echo argocd login: admin/secret
-echo http://${argocd_route}
-echo
 echo codeready workspaces: create a new user to initiate workspace build
 echo http://${CHE_HOST}/f?url=${CODEREADY_DEVFILE_URL}
 echo
