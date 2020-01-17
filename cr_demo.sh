@@ -15,7 +15,7 @@ if [[ $ARGOCLI == "" ]]
 then
         echo
         echo "argocd CLI not installed"
-        echo "see https://github.com/argoproj/argo-cd/blob/master/docs/cli_installation.md for installation instructions"
+        echo run script ./codeready/install_argocli.sh to continue
         echo "re-run the script after argocd CLI is installed"
         echo
         exit 1
