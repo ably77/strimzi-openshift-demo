@@ -277,6 +277,8 @@ By default, the repo is set up to deploy the demo app based off of these repos b
 - https://github.com/ably77/strimzi-demo-prometheus
 - https://github.com/ably77/strimzi-demo-grafana
 - https://github.com/ably77/strimzi-demo-kafka
+- https://github.com/ably77/strimzi-demo-shared
+- https://github.com/ably77/strimzi-demo-codeready
 
 If you want to demonstrate and control git push to drive continuous delivery, fork this repository and re-direct to your own personal github. An example of doing so with the iot-demo app is below, but you can fork any of the repositories above if you want to demonstrate CD with that component. Only one fork is needed to effectively show Continuous Delivery in action.
 
@@ -341,6 +343,8 @@ oc get kafkatopic
 ```
 
 To scale your Kafka cluster up, add a broker using the commmand below and modify the `replicas:3 --> 4` for kafka brokers
+
+Note: Command below only if you are deploying without argoCD. If using argoCD, use git as your source.
 ```
 oc edit -f strimzi-operator/deploy/crs/kafka-cluster-3broker.yaml -n myproject
 ```
@@ -362,8 +366,6 @@ oc get grafanadatasources
 ```
 
 Check out the ![Official Github](https://github.com/integr8ly/grafana-operator/tree/master/documentation) for integr8ly for additional documentation
-
-## Troubleshooting
 
 ## Uninstall
 ```
