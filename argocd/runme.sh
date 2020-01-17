@@ -10,6 +10,7 @@ repo3_url="https://github.com/ably77/strimzi-demo-prometheus"
 repo4_url="https://github.com/ably77/strimzi-demo-grafana"
 repo5_url="https://github.com/ably77/strimzi-demo-kafka"
 repo6_url="https://github.com/ably77/strimzi-demo-codeready"
+repo7_url="https://github.com/ably77/strimzi-demo-shared"
 
 # Create a new namespace for ArgoCD components
 oc new-project ${argo_namespace}
@@ -52,3 +53,4 @@ argocd repo add ${repo3_url}
 argocd repo add ${repo4_url}
 argocd repo add ${repo5_url}
 argocd repo add ${repo6_url}
+argocd repo add ${repo7_url}

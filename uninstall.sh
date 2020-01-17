@@ -53,3 +53,8 @@ oc delete pvc --all -n myproject
 # Remove jobs and cronJobs from directory
 rm -rf extras/manual_deploy/jobs/generated
 mkdir extras/manual_deploy/jobs/generated
+
+# Delete projects
+oc delete project myproject
+oc delete project codeready
+oc delete project argocd

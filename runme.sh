@@ -8,18 +8,14 @@ ARGOCD_ENABLED="true"
 CODEREADY_DEVFILE_URL="https://raw.githubusercontent.com/ably77/strimzi-demo-codeready/master/dev-file/strimzi-demo-devfile.yaml"
 CODEREADY_NAMESPACE="codeready"
 
-### Create the project namespace
-echo creating project: ${NAMESPACE}
-oc new-project ${NAMESPACE}
-
 #### Create Grafana CRDs
 oc create -f grafana-operator/deploy/crds
 
 #### Create CodeReady CRDs
 oc apply -f codeready/deploy/crds/org_v1_che_crd.yaml
 
-### Deploy Strimzi Operator
-oc apply -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.15.0/strimzi-cluster-operator-0.15.0.yaml -n ${NAMESPACE}
+### Deploy Strimzi CRDs
+oc apply -f strimzi-operator/deploy/crds/strimzi-cluster-operator-0.15.0.yaml
 
 
 #### If ArgoCD Demo is Enabled ####
@@ -41,9 +37,6 @@ fi
 
 echo now deploying argoCD
 
-### use project argocd
-oc project argocd
-
 ### deploy ArgoCD
 ./argocd/runme.sh
 
@@ -53,6 +46,10 @@ open http://${argocd_route}
 
 echo sleeping 10 seconds before deploying argo apps
 sleep 10
+
+### deploy kafka in argocd
+echo deploying prometheus
+oc create -f argocd/strimzi-demo-kafka.yaml
 
 ### deploy grafana in argocd
 echo deploying grafana
@@ -65,9 +62,8 @@ oc create -f argocd/strimzi-demo-prometheus.yaml
 ### deploy codeready in argocd
 oc create -f argocd/strimzi-demo-codeready.yaml
 
-### deploy kafka in argocd
-echo deploying prometheus
-oc create -f argocd/strimzi-demo-kafka.yaml
+### deploy shared components in argocd
+oc create -f argocd/strimzi-demo-shared.yaml
 
 ### check kafka deployment status
 echo waiting for kafka deployment to complete
@@ -90,6 +86,10 @@ fi
 
 #### If ArgoCD Demo is Disabled ####
 if [ "$ARGOCD_ENABLED" = "false" ]; then
+
+### Create the project namespace
+echo creating project: ${NAMESPACE}
+oc new-project ${NAMESPACE}
 
 ### deploy grafana operator
 echo
@@ -187,3 +187,4 @@ echo http://${argocd_route}
 echo
 echo codeready workspaces: create a new user to initiate workspace build
 echo http://${CHE_HOST}/f?url=${CODEREADY_DEVFILE_URL}
+echo
