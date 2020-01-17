@@ -15,8 +15,6 @@ then
         exit 1
 fi
 
-echo now deploying argoCD
-
 # Removing Argo/IoT demo
 ./argocd/uninstall.sh
 
