@@ -1,0 +1,4 @@
+kind: User
+apiVersion: klum.cattle.io/v1alpha1
+metadata:
+  name: demouser

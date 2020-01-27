@@ -8,8 +8,19 @@ CODEREADY_NAMESPACE="codeready"
 KAFKA_NAMESPACE="myproject"
 GRAFANA_NAMESPACE="myproject"
 
-### Check if user is kube:admin
-./extras/check_user.sh
+### Check if user is system:serviceaccount:klum:demouser
+WHOAMI=$(oc whoami)
+if [[ $WHOAMI != "system:serviceaccount:klum:demouser" ]]
+then
+        echo
+        echo not logged in as kube:admin
+        echo login using token from the cr_demo_setup.sh script
+        echo or re-run ./klum/login_command.sh
+        echo if you have another user with kube:admin rights, comment this part of script out
+        echo "re-run the script after kube:admin user is logged in"
+        echo
+        exit 1
+fi
 
 ### Check if argocd CLI is installed
 ARGOCLI=$(which argocd)
@@ -35,9 +46,6 @@ oc create -f argocd/strimzi-demo-grafana.yaml
 ### deploy prometheus in argocd
 echo deploying prometheus
 oc create -f argocd/strimzi-demo-prometheus.yaml
-
-### deploy shared components in argocd
-oc create -f argocd/strimzi-demo-shared.yaml
 
 ### check kafka deployment status
 echo waiting for kafka deployment to complete

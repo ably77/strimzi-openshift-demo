@@ -41,6 +41,9 @@ oc new-project codeready
 ### deploy codeready in argocd
 oc create -f argocd/strimzi-demo-codeready.yaml
 
+### deploy shared components in argocd
+oc create -f argocd/strimzi-demo-shared.yaml
+
 ### wait for codeready workspace to deploy
 ./extras/wait-for-rollout.sh deployment codeready ${CODEREADY_NAMESPACE}
 
@@ -49,10 +52,15 @@ echo deploying codeready workspace
 CHE_HOST=$(oc get routes -n ${CODEREADY_NAMESPACE} | grep codeready-codeready | awk '{ print $2 }')
 open http://${CHE_HOST}/f?url=${CODEREADY_DEVFILE_URL}
 
-### end
+### codeready workspaces url
 echo
 echo setup complete
 echo
 echo codeready workspaces: create a new user to initiate workspace build
+echo
+echo if on linux, the open the link below in your browser to initiate workspace build
 echo http://${CHE_HOST}/f?url=${CODEREADY_DEVFILE_URL}
 echo
+
+### oc login command for codeready workspace demouser
+./klum/login_command.sh
