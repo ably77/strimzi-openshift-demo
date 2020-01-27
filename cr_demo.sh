@@ -14,8 +14,8 @@ if [[ $WHOAMI != "system:serviceaccount:klum:demouser" ]]
 then
         echo
         echo not logged in as kube:admin
-        echo login using token from the cr_demo_setup.sh script
-        echo or re-run ./klum/login_command.sh
+        echo login using token from the output of the cr_demo_setup.sh script
+        echo or re-run ./klum/login_command.sh from your local machine
         echo if you have another user with kube:admin rights, comment this part of script out
         echo "re-run the script after kube:admin user is logged in"
         echo
