@@ -44,6 +44,9 @@ oc create -f argocd/strimzi-demo-codeready.yaml
 ### deploy shared components in argocd
 oc create -f argocd/strimzi-demo-shared.yaml
 
+### deploy klum components in argocd
+oc create -f argocd/strimzi-demo-klum.yaml
+
 ### wait for codeready workspace to deploy
 ./extras/wait-for-rollout.sh deployment codeready ${CODEREADY_NAMESPACE}
 
