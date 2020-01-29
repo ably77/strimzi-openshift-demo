@@ -3,7 +3,7 @@
 # argo deployment varaiables
 argo_namespace="argocd"
 new_password="secret"
-argo_version="1.3.6"
+argo_version="1.4.2"
 repo1_url="https://github.com/ably77/iot-argocd"
 repo2_url="https://github.com/ably77/strimzi-loadtest"
 repo3_url="https://github.com/ably77/strimzi-demo-prometheus"
@@ -11,6 +11,7 @@ repo4_url="https://github.com/ably77/strimzi-demo-grafana"
 repo5_url="https://github.com/ably77/strimzi-demo-kafka"
 repo6_url="https://github.com/ably77/strimzi-demo-codeready"
 repo7_url="https://github.com/ably77/strimzi-demo-shared"
+repo8_url="https://github.com/ably77/strimzi-demo-klum"
 
 # Create a new namespace for ArgoCD components
 oc new-project ${argo_namespace}
@@ -37,6 +38,10 @@ argocd_route=$(oc -n ${argo_namespace} get route argocd-server -o jsonpath='{.sp
 # wait for patch re-deployment
 ./extras/wait-for-condition.sh argocd-server ${argo_namespace}
 
+# sleep for route creation
+echo sleeping for 30 seconds for route creation
+sleep 30
+
 # Login with the current admin password
 argocd --insecure --grpc-web login ${argocd_route}:443 --username admin --password ${argocd_server_password}
 
@@ -54,3 +59,4 @@ argocd repo add ${repo4_url}
 argocd repo add ${repo5_url}
 argocd repo add ${repo6_url}
 argocd repo add ${repo7_url}
+argocd repo add ${repo8_url}
