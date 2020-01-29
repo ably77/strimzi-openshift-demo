@@ -71,7 +71,6 @@ mkdir extras/manual_deploy/jobs/generated
 oc delete project myproject
 oc delete project codeready
 oc delete project argocd
-oc delete project klum
 
 # back to default project
 oc project default

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 TOKEN=$(oc get kubeconfig demouser -o json | jq .spec.users[0].user.token)
 APISERVER=$(oc config view -o json | jq .clusters[0].cluster.server)
 

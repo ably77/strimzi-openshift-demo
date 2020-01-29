@@ -12,7 +12,6 @@ app4_name="strimzi-demo-grafana"
 app5_name="strimzi-demo-kafka"
 app6_name="strimzi-demo-codeready"
 app7_name="strimzi-demo-shared"
-app8_name="strimzi-demo-klum"
 
 # delete app1
 argocd app delete ${app1_name} --cascade
@@ -34,9 +33,6 @@ argocd app delete ${app6_name} --cascade
 
 # delete app7
 argocd app delete ${app7_name} --cascade
-
-# delete app8
-argocd app delete ${app8_name} --cascade
 
 # Wait for app deletion
 ./extras/wait-for-argo-app-deletion.sh
