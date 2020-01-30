@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Add argocd cli path
+echo adding path to argocd cli to your ~/.bash_profile
+echo
+echo export PATH=/home/jboss/.local/bin:/home/jboss/bin:/usr/share/Modules/bin:/usr/bin:/usr/bin:/home/jboss/go/bin:/opt/app-root/src/bin:/opt/app-root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/projects/strimzi-openshift-demo/codeready/ >> ~/.bash_profile
+source ~/.bash_profile
+
 # Codeready Parameters
 CODEREADY_DEVFILE_URL="https://raw.githubusercontent.com/ably77/strimzi-demo-codeready/master/dev-file/strimzi-demo-devfile.yaml"
 CODEREADY_NAMESPACE="codeready"
@@ -15,19 +21,6 @@ then
         echo
         echo "not logged in as a user with cluster-admin access"
         echo "re-run the script after a user with cluster-admin rights such as kubeadmin is logged in"
-        echo
-        exit 1
-fi
-
-### Check if argocd CLI is installed
-ARGOCLI=$(which argocd)
-echo checking if argocd CLI is installed
-if [[ $ARGOCLI == "" ]]
-then
-        echo
-        echo "argocd CLI not installed"
-        echo run script ./codeready/install_argocli.sh to continue
-        echo "re-run the script after argocd CLI is installed"
         echo
         exit 1
 fi
