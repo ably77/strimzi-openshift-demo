@@ -11,7 +11,7 @@ GRAFANA_NAMESPACE="myproject"
 # Add argocd cli path
 echo adding path to argocd cli to your ~/.bash_profile
 echo
-echo export PATH=/home/jboss/.local/bin:/home/jboss/bin:/usr/share/Modules/bin:/usr/bin:/usr/bin:/home/jboss/go/bin:/opt/app-root/src/bin:/opt/app-root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/projects/strimzi-openshift-demo/codeready/ >> ~/.bash_profile
+echo export PATH=/home/jboss/.local/bin:/home/jboss/bin:/usr/share/Modules/bin:/usr/bin:/usr/bin:/home/jboss/go/bin:/opt/app-root/src/bin:/opt/app-root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/projects/strimzi-openshift-demo/argocd/ >> ~/.bash_profile
 source ~/.bash_profile
 
 ### Check if user has cluster-admin privileges
