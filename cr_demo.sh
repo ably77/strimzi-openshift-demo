@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# Add argocd cli path
-echo adding path to argocd cli to your ~/.bash_profile
-echo
-echo export PATH=/home/jboss/.local/bin:/home/jboss/bin:/usr/share/Modules/bin:/usr/bin:/usr/bin:/home/jboss/go/bin:/opt/app-root/src/bin:/opt/app-root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/projects/strimzi-openshift-demo/codeready/ >> ~/.bash_profile
-source ~/.bash_profile
-
 # Codeready Parameters
 CODEREADY_DEVFILE_URL="https://raw.githubusercontent.com/ably77/strimzi-demo-codeready/master/dev-file/strimzi-demo-devfile.yaml"
 CODEREADY_NAMESPACE="codeready"
@@ -14,7 +8,13 @@ CODEREADY_NAMESPACE="codeready"
 KAFKA_NAMESPACE="myproject"
 GRAFANA_NAMESPACE="myproject"
 
-### Check if user is system:serviceaccount:klum:demouser
+# Add argocd cli path
+echo adding path to argocd cli to your ~/.bash_profile
+echo
+echo export PATH=/home/jboss/.local/bin:/home/jboss/bin:/usr/share/Modules/bin:/usr/bin:/usr/bin:/home/jboss/go/bin:/opt/app-root/src/bin:/opt/app-root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/projects/strimzi-openshift-demo/codeready/ >> ~/.bash_profile
+source ~/.bash_profile
+
+### Check if user has cluster-admin privileges
 CANI=$(oc auth can-i get namespaces)
 if [[ $CANI != "yes" ]]
 then
