@@ -9,15 +9,12 @@ KAFKA_NAMESPACE="myproject"
 GRAFANA_NAMESPACE="myproject"
 
 ### Check if user is system:serviceaccount:klum:demouser
-WHOAMI=$(oc whoami)
-if [[ $WHOAMI != "system:serviceaccount:klum:demouser" ]]
+CANI=$(oc auth can-i get namespaces)
+if [[ $CANI != "yes" ]]
 then
         echo
-        echo not logged in as kube:admin
-        echo login using token from the output of the cr_demo_setup.sh script
-        echo or re-run ./klum/login_command.sh from your local machine
-        echo if you have another user with kube:admin rights, comment this part of script out
-        echo "re-run the script after kube:admin user is logged in"
+        echo "not logged in as a user with cluster-admin access"
+        echo "re-run the script after a user with cluster-admin rights such as kubeadmin is logged in"
         echo
         exit 1
 fi
