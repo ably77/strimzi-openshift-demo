@@ -3,7 +3,7 @@
 # argo deployment varaiables
 argo_namespace="argocd"
 argo_route="argocd-server"
-argo_version="1.3.6"
+argo_version="1.4.2"
 
 app1_name="iot-demo"
 app2_name="strimzi-loadtest"
