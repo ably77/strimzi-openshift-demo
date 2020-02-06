@@ -1,16 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: strimzi-demo-kafka-dr
+  name: strimzi-demo-prometheus
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default
+  project: main
   source:
-    repoURL: https://github.com/ably77/strimzi-demo-kafka
+    repoURL: https://github.com/ably77/strimzi-demo-prometheus
     targetRevision: HEAD
     path: .
   destination:
-    server: https://api.ly-demo-dr.openshiftaws.com:6443
+    server: https://kubernetes.default.svc
     namespace: myproject
   syncPolicy:
     automated:

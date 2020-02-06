@@ -27,15 +27,15 @@ fi
 
 ### deploy kafka in argocd
 echo deploying kafka
-oc create -f argocd/strimzi-demo-kafka.yaml
+oc create -f argocd/apps/1/strimzi-demo-kafka.yaml
 
 ### deploy grafana in argocd
 echo deploying grafana
-oc create -f argocd/strimzi-demo-grafana.yaml
+oc create -f argocd/apps/1/strimzi-demo-grafana.yaml
 
 ### deploy prometheus in argocd
 echo deploying prometheus
-oc create -f argocd/strimzi-demo-prometheus.yaml
+oc create -f argocd/apps/1/strimzi-demo-prometheus.yaml
 
 ### check kafka deployment status
 echo waiting for kafka deployment to complete
@@ -45,13 +45,9 @@ echo waiting for kafka deployment to complete
 echo checking grafana deployment status before deploying applications
 ./extras/wait-for-condition.sh grafana-deployment ${GRAFANA_NAMESPACE}
 
-### deploy IoT demo application in argocd
-echo creating iot-demo app in argocd
-oc create -f argocd/iot-demo.yaml
-
-### deploy strimzi loadtesting demo in argocd
-echo creating strimzi-loadtest demo in argocd
-oc create -f argocd/strimzi-loadtest.yaml
+### deploy IoT demo and strimzi-loadtest application in argocd
+echo creating iot-demo and strimzi-loadtest apps in argocd
+oc create -f argocd/apps/2/
 
 ### open grafana route
 echo opening grafana route

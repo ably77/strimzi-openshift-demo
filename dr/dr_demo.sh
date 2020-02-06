@@ -16,9 +16,6 @@ oc create -f grafana-operator/deploy/crds --context=${CONTEXT_NAME}
 ### Deploy Strimzi CRDs
 oc apply -f strimzi-operator/deploy/crds/strimzi-cluster-operator-0.15.0.yaml --context=${CONTEXT_NAME}
 
-### Add dr context to argocd
-argocd cluster add ${CONTEXT_NAME}
-
 ### Check if argocd CLI is installed
 ARGOCLI=$(which argocd)
 echo checking if argocd CLI is installed
@@ -32,23 +29,14 @@ then
         exit 1
 fi
 
-### deploy kafka in argocd
-echo deploying prometheus
-oc create -f dr/strimzi-demo-kafka-dr.yaml
+### Add dr context to argocd
+argocd cluster add ${CONTEXT_NAME}
 
-### deploy grafana in argocd
-echo deploying grafana
-oc create -f dr/strimzi-demo-grafana-dr.yaml
+### create argocd dr project
+oc create -f dr/dr-project.yaml
 
-### deploy prometheus in argocd
-echo deploying prometheus
-oc create -f dr/strimzi-demo-prometheus-dr.yaml
-
-### deploy codeready in argocd
-#oc create -f dr/strimzi-demo-codeready-dr.yaml
-
-### deploy shared components in argocd
-oc create -f dr/strimzi-demo-shared-dr.yaml
+### create dr applications
+oc create -f dr/apps/1/
 
 ### check kafka deployment status
 echo waiting for kafka deployment to complete
@@ -58,13 +46,8 @@ echo waiting for kafka deployment to complete
 echo checking grafana deployment status before deploying applications
 ./extras/wait-for-condition-context.sh grafana-deployment ${GRAFANA_NAMESPACE} ${CONTEXT_NAME}
 
-### deploy IoT demo application in argocd
-echo creating iot-demo app in argocd
-oc create -f dr/iot-demo-dr.yaml
-
-### deploy strimzi loadtesting demo in argocd
-echo creating strimzi-loadtest demo in argocd
-oc create -f dr/strimzi-loadtest-dr.yaml
+### deploy IoT demo and load test application in argocd
+oc create -f dr/apps/2/
 
 ### open grafana route
 echo opening grafana route

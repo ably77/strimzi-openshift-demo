@@ -1,16 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: strimzi-demo-shared-dr
+  name: strimzi-demo-grafana
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default
+  project: main
   source:
-    repoURL: https://github.com/ably77/strimzi-demo-shared
+    repoURL: https://github.com/ably77/strimzi-demo-grafana
     targetRevision: HEAD
     path: .
   destination:
-    server: https://api.ly-demo-dr.openshiftaws.com:6443
+    server: https://kubernetes.default.svc
     namespace: myproject
   syncPolicy:
     automated:

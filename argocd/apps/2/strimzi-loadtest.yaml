@@ -1,16 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: strimzi-loadtest-dr
+  name: strimzi-loadtest
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default
+  project: main
   source:
     repoURL: https://github.com/ably77/strimzi-loadtest
     targetRevision: HEAD
     path: .
   destination:
-    server: https://api.ly-demo-dr.openshiftaws.com:6443
+    server: https://kubernetes.default.svc
     namespace: myproject
   syncPolicy:
     automated:

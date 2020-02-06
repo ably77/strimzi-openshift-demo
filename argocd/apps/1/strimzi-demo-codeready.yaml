@@ -3,8 +3,10 @@ kind: Application
 metadata:
   name: strimzi-demo-codeready
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default
+  project: main
   source:
     repoURL: https://github.com/ably77/strimzi-demo-codeready
     targetRevision: HEAD

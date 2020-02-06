@@ -1,16 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: iot-demo
+  name: strimzi-loadtest-dr
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default
+  project: dr
   source:
-    repoURL: https://github.com/ably77/iot-argocd.git
+    repoURL: https://github.com/ably77/strimzi-loadtest
     targetRevision: HEAD
     path: .
   destination:
-    server: https://kubernetes.default.svc
+    server: https://api.ly-demo-dr.openshiftaws.com:6443
     namespace: myproject
   syncPolicy:
     automated:
