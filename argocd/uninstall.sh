@@ -7,6 +7,7 @@ argo_version="1.4.2"
 # delete argo apps
 oc delete -f argocd/apps/2/
 oc delete -f argocd/apps/1/
+oc delete -f argocd/apps/testing/
 
 # Wait for app deletion
 ./extras/wait-for-argo-app-deletion.sh
