@@ -1,9 +1,13 @@
-# Openshift Strimzi Kafka Operator Demo - Multi-node Deployment
+# Openshift Test Bed
+The purpose of this repo is to show several examples of Openshift and upstream Kubernetes concepts as reference examples that can be used and expanded on.
+
+Examples Concepts demonstrated:
 - Real-time Streaming IoT Application with Console
 - ArgoCD driven Continuous Delivery for all components (Kafka, Grafana, Prometheus, load-testing demo, iot-demo app)
 - Prometheus metrics
 - Grafana Dashboards
 - CodeReady Workspaces
+- Tekton Build Pipelines
 
 Optional:
 - Autoscaling
@@ -12,6 +16,49 @@ Optional:
 
 ## Youtube Video Demonstration
 [![Youtube Video Demonstration](https://github.com/ably77/strimzi-openshift-demo/blob/master/resources/youtube1.png)](https://youtu.be/Mt0RzqFKnrY)
+
+## Prerequisites for Lab:
+- Multi Node Openshift/Kubernetes Cluster - (This guide is tested on 2x r5.xlarge workers)
+- Admin Privileges (i.e. cluster-admin RBAC privileges or logged in as system:admin user)
+- ArgoCLI Installed (see https://github.com/argoproj/argo-cd/blob/master/docs/cli_installation.md)
+- oc client installed (see https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/)
+
+## Running this Demo
+
+#### Running with ArgoCD and Codeready Workspaces - Deployment Workflow + Streaming App Platform Demo
+If you have an Openshift cluster up, `argocd` CLI installed, and are authenticated to the `oc` CLI just run the installation script below. The script itself has more commented information on the steps and commands if you prefer to run through this demo manually.
+```
+./runme.sh
+```
+
+#### Running without ArgoCD - Streaming App Platform Demo
+If you would like to run the demo without any ArgoCD components
+```
+./no_argocd_runme.sh
+```
+
+This will run the script off of the static files in the directories instead of deploying applications from ArgoCD
+
+This script will:
+- Deploy the Strimzi Kafka Operator
+- Deploy an ephemeral kafka cluster with 3 broker nodes and 3 zookeeper nodes
+- Create three Kafka topics (my-topic1, my-topic2, my-topic3)
+- Deploy Prometheus
+- Deploy the Integr8ly Grafana Operator
+- Add the Prometheus Datasource to Grafana
+- Add Strimzi Kafka, Kafka Exporter, and Zookeeper Dashboards
+- Deploy and configure ArgoCD
+- Connect ArgoCD to IoT Github Repo (customizable)
+- Deploy the IoT Temperature Sensors Demo using ArgoCD
+- Open ArgoCD Route
+- Open Grafana Route
+- Open IoT Sensors Demo App Route
+- Deploy sample cronJob1 and cronJob2
+- Deploy CodeReady Workspaces
+- Create an Eclipse Che cluster with demo this demo's repositories
+- Deploy Tekton Pipelines Operator using ArgoCD
+- Deploy cat-dog voting app Tekton image build pipeline
+- Deploy cat-dog voting app using ArgoCD
 
 ## Overview
 Apache Kafka is a highly scalable and performant distributed event streaming platform great for storing, reading, and analyzing streaming data. Originally created at LinkedIn, the project was open sourced to the Apache Foundation in 2011. Kafka enables companies looking to move from traditional batch processes over to more real-time streaming use cases.
@@ -78,48 +125,6 @@ Why CodeReady Workspaces?
 - Develop solutions on the same platform that is running them
 - Maintain security of intellectual property (IP) on the platform itself
 - Fully capable web-based IDE allows users to work wherever there is internet and browser access
-
-## Prerequisites for Lab:
-- Multi Node Openshift/Kubernetes Cluster - (This guide is tested on 2x r5.xlarge workers)
-- Admin Privileges (i.e. cluster-admin RBAC privileges or logged in as system:admin user)
-- ArgoCLI Installed (see https://github.com/argoproj/argo-cd/blob/master/docs/cli_installation.md)
-- oc client installed (see https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/)
-
-## Running this Demo
-
-#### Running with ArgoCD and Codeready Workspaces - Deployment Workflow + Streaming App Platform Demo
-If you have an Openshift cluster up, `argocd` CLI installed, and are authenticated to the `oc` CLI just run the installation script below. The script itself has more commented information on the steps and commands if you prefer to run through this demo manually.
-```
-./runme.sh
-```
-
-#### Running without ArgoCD - Streaming App Platform Demo
-If you would like to run the demo without any ArgoCD components
-```
-./no_argocd_runme.sh
-```
-
-This will run the script off of the static files in the directories instead of deploying applications from ArgoCD
-
-This quick script will:
-- Deploy the Strimzi Kafka Operator
-- Deploy an persistent EBS-backed kafka cluster with 3 broker nodes and 3 zookeeper nodes
-- Setup the kafka brokers connectivity using nodePort services
-- Create three Kafka topics (my-topic1, my-topic2, my-topic3)
-- Deploy Prometheus
-- Deploy the Integr8ly Grafana Operator
-- Add the Prometheus Datasource to Grafana
-- Add Strimzi Kafka, Kafka Exporter, and Zookeeper Dashboards
-- Deploy and configure ArgoCD
-- Connect ArgoCD to IoT Github Repo (customizable)
-- Deploy the IoT Temperature Sensors Demo using ArgoCD
-- Open ArgoCD Route
-- Open Grafana Route
-- Open IoT Sensors Demo App Route
-- Generate sample Kafka Producer jobs and cronJobs with correct network routing (/jobs/generated/)
-- Deploy sample cronJob1 and cronJob2
-- Deploy CodeReady Workspaces
-- Create an Eclipse Che cluster with demo this demo's repositories
 
 
 ### Demonstrating the IoT Demo
