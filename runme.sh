@@ -17,6 +17,9 @@ oc apply -f codeready/deploy/crds/org_v1_che_crd.yaml
 ### Deploy Strimzi CRDs
 oc apply -f strimzi-operator/deploy/crds/strimzi-cluster-operator-0.15.0.yaml
 
+### Deploy Tekton CRDs
+oc apply -f tekton/crd.yaml
+
 ### Check if argocd CLI is installed
 ARGOCLI=$(which argocd)
 echo checking if argocd CLI is installed
