@@ -1,12 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: strimzi-loadtest
+  name: strimzi-demo-shared
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default
+  project: main
   source:
-    repoURL: https://github.com/ably77/strimzi-loadtest
+    repoURL: https://github.com/ably77/strimzi-demo-shared
     targetRevision: HEAD
     path: .
   destination:

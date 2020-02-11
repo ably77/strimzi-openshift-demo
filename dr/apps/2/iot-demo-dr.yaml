@@ -1,16 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: strimzi-demo-grafana
+  name: iot-demo-dr
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default
+  project: dr
   source:
-    repoURL: https://github.com/ably77/strimzi-demo-grafana
+    repoURL: https://github.com/ably77/iot-argocd.git
     targetRevision: HEAD
     path: .
   destination:
-    server: https://kubernetes.default.svc
+    server: https://api.ly-demo-dr.openshiftaws.com:6443
     namespace: myproject
   syncPolicy:
     automated:

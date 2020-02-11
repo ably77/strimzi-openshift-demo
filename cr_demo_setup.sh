@@ -5,7 +5,7 @@ CODEREADY_DEVFILE_URL="https://raw.githubusercontent.com/ably77/strimzi-demo-cod
 CODEREADY_NAMESPACE="codeready"
 
 #### Create Grafana CRDs
-oc create -f grafana-operator/deploy/crds
+oc create -f grafana-operator/deploy/crds/
 
 #### Create CodeReady CRDs
 oc apply -f codeready/deploy/crds/org_v1_che_crd.yaml
@@ -39,10 +39,10 @@ open http://${argocd_route}
 oc new-project codeready
 
 ### deploy codeready in argocd
-oc create -f argocd/strimzi-demo-codeready.yaml
+oc create -f argocd/apps/1/strimzi-demo-codeready.yaml
 
 ### deploy shared components in argocd
-oc create -f argocd/strimzi-demo-shared.yaml
+oc create -f argocd/apps/1/strimzi-demo-shared.yaml
 
 ### wait for codeready workspace to deploy
 ./extras/wait-for-rollout.sh deployment codeready ${CODEREADY_NAMESPACE}

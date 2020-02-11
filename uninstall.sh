@@ -16,6 +16,9 @@ then
 fi
 
 # Removing Argo/IoT demo
+./dr/dr_uninstall.sh
+
+# Removing Argo/IoT demo
 ./argocd/uninstall.sh
 
 # Removing the consumers if manually deployed

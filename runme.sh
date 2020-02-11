@@ -42,23 +42,12 @@ open http://${argocd_route}
 echo sleeping 10 seconds before deploying argo apps
 sleep 10
 
-### deploy kafka in argocd
-echo deploying prometheus
-oc create -f argocd/strimzi-demo-kafka.yaml
+### create main argocd project
+oc create -f argocd/main-project.yaml
 
-### deploy grafana in argocd
-echo deploying grafana
-oc create -f argocd/strimzi-demo-grafana.yaml
-
-### deploy prometheus in argocd
-echo deploying prometheus
-oc create -f argocd/strimzi-demo-prometheus.yaml
-
-### deploy codeready in argocd
-oc create -f argocd/strimzi-demo-codeready.yaml
-
-### deploy shared components in argocd
-oc create -f argocd/strimzi-demo-shared.yaml
+### deploy apps in argocd
+echo deploying prometheus, kafka, grafana, and codeready applications in argocd
+oc create -f argocd/apps/1/
 
 ### check kafka deployment status
 echo waiting for kafka deployment to complete
@@ -68,13 +57,9 @@ echo waiting for kafka deployment to complete
 echo checking grafana deployment status before deploying applications
 ./extras/wait-for-condition.sh grafana-deployment ${GRAFANA_NAMESPACE}
 
-### deploy IoT demo application in argocd
-echo creating iot-demo app in argocd
-oc create -f argocd/iot-demo.yaml
-
-### deploy strimzi loadtesting demo in argocd
-echo creating strimzi-loadtest demo in argocd
-oc create -f argocd/strimzi-loadtest.yaml
+### deploy IoT demo and strimzi-loadtest application in argocd
+echo creating iot-demo and strimzi-loadtest apps in argocd
+oc create -f argocd/apps/2/
 
 ### open grafana route
 echo opening grafana route
@@ -86,10 +71,11 @@ open https://${grafana_route}
 
 ### open IoT demo app route
 echo opening consumer-app route
-iot_route=$(oc get routes -n ${KAFKA_NAMESPACE} | grep consumer-app | awk '{ print $2 }')
+# fix this static address
+iot_route=$(oc get routes -n ${KAFKA_NAMESPACE} | grep consumer-app-myproject.apps.ly-demo.openshiftaws.com | awk '{ print $2 }')
 open http://${iot_route}
 
-#fix this
+### switch to codeready namespace
 oc project codeready
 
 ### wait for codeready workspace to deploy
