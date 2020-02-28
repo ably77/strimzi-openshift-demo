@@ -20,6 +20,11 @@ oc new-project ${argo_namespace}
 
 # Apply the ArgoCD Install Manifest
 oc apply -f https://raw.githubusercontent.com/argoproj/argo-cd/v${argo_version}/manifests/install.yaml -n ${argo_namespace}
+#oc create -f argocd/testing/operator-group.yaml
+#oc create -f argocd/testing/subscription.yaml
+
+# Create the argocd cluster
+#oc create -f argocd/testing/cr.yaml
 
 ./extras/wait-for-condition.sh argocd-server ${argo_namespace}
 
@@ -41,7 +46,7 @@ argocd_route=$(oc -n ${argo_namespace} get route argocd-server -o jsonpath='{.sp
 ./extras/wait-for-condition.sh argocd-server ${argo_namespace}
 
 # sleep for route creation
-echo sleeping for 30 seconds for route creation
+#echo sleeping for 30 seconds for route creation
 sleep 30
 
 # Login with the current admin password

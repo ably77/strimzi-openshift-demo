@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: strimzi-demo-voteapp-pipeline-dr
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: dr
+  source:
+    repoURL: https://github.com/ably77/strimzi-demo-voteapp-pipeline
+    targetRevision: HEAD
+    path: .
+  destination:
+    server: https://api.ly-demo-dr.openshiftaws.com:6443
+    namespace: pipelines-tutorial
+  syncPolicy:
+    automated:
+      prune: true # Specifies if resources should be pruned during auto-syncing ( false by default ).
+      selfHeal: true # Specifies if partial app sync should be executed when resources are changed only in target Kubernetes cluster and no git change detected ( false by default ).

@@ -10,6 +10,9 @@ GRAFANA_NAMESPACE="myproject"
 #### Create Grafana CRDs
 oc create -f grafana-operator/deploy/crds --context=${CONTEXT_NAME}
 
+#### Create tekton CRD
+oc apply -f tekton/crd.yaml --context=${CONTEXT_NAME}
+
 #### Create CodeReady CRDs
 #oc apply -f codeready/deploy/crds/org_v1_che_crd.yaml
 
